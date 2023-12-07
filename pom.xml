@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>dev.task</groupId>
-	<artifactId>dndquest</artifactId>
+	<artifactId>fantasy-quest-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>dndquest</name>
+	<name>fantasy-quest-api</name>
 	<description>Fantasy Quest Api</description>
 	<properties>
 		<java.version>17</java.version>

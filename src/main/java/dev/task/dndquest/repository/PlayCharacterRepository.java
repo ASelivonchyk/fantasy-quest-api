@@ -1,9 +1,9 @@
 package dev.task.dndquest.repository;
 
-import dev.task.dndquest.model.Character;
+import dev.task.dndquest.model.entity.PlayCharacter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CharacterRepository extends JpaRepository<Character, Long> {
+public interface PlayCharacterRepository extends JpaRepository<PlayCharacter, Long> {
 }
