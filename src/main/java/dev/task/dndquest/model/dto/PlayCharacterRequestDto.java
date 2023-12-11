@@ -1,7 +1,8 @@
 package dev.task.dndquest.model.dto;
 
-import dev.task.dndquest.validator.CharacterClassConstraint;
-import dev.task.dndquest.validator.PlayCharactersConstraint;
+import dev.task.dndquest.validator.annotation.CharacterClassConstraint;
+import dev.task.dndquest.validator.annotation.PlayCharactersConstraint;
+import dev.task.dndquest.validator.annotation.RaceConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ public class PlayCharacterRequestDto {
     private String name;
     @CharacterClassConstraint
     private String playCharClass;
+    @RaceConstraint
     private String playCharRace;
     private int strength;
     private int dexterity;

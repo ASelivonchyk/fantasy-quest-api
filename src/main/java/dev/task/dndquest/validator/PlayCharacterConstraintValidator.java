@@ -1,6 +1,7 @@
 package dev.task.dndquest.validator;
 
 import dev.task.dndquest.model.dto.PlayCharacterRequestDto;
+import dev.task.dndquest.validator.annotation.PlayCharactersConstraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

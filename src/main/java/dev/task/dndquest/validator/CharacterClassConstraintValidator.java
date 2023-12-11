@@ -1,21 +1,23 @@
 package dev.task.dndquest.validator;
 
-import dev.task.dndquest.model.dto.PlayCharacterRequestDto;
+import dev.task.dndquest.service.PlayCharacterClassService;
+import dev.task.dndquest.validator.annotation.CharacterClassConstraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class CharacterClassConstraintValidator
-         implements ConstraintValidator<CharacterClassConstraint, PlayCharacterRequestDto> {
+         implements ConstraintValidator<CharacterClassConstraint, String> {
+    @Autowired
+    private PlayCharacterClassService playCharacterClassService;
+
     @Override
     public void initialize(CharacterClassConstraint constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
     }
     @Override
-    public boolean isValid(PlayCharacterRequestDto value,
+    public boolean isValid(String value,
                            ConstraintValidatorContext context) {
-       // return Arrays.stream(PlayCharacterClassName.values())
-       //         .forEach(System.out::println);
-        return true;
-                //.anyMatch(c -> c.equals(value.getPlayCharClass()));
+        return playCharacterClassService.existsByName(value);
     }
 }
