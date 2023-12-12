@@ -1,6 +1,6 @@
 package dev.task.dndquest.service.impl;
 
-import dev.task.dndquest.exception.DBException;
+import dev.task.dndquest.exception.CharNotFoundException;
 import dev.task.dndquest.model.entity.PlayCharacterClass;
 import dev.task.dndquest.repository.PlayCharacterClassRepository;
 import dev.task.dndquest.service.PlayCharacterClassService;
@@ -14,8 +14,7 @@ public class PlayCharacterClassServiceImpl implements PlayCharacterClassService 
 
     @Override
     public PlayCharacterClass findByName(String name) {
-        return repository.findByName(name)
-               .orElseThrow(() -> new DBException("no such character class in database"));
+        return repository.findByName(name).orElseThrow(CharNotFoundException::new);
     }
 
     @Override

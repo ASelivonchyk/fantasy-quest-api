@@ -4,10 +4,10 @@ import dev.task.dndquest.service.RaceService;
 import dev.task.dndquest.validator.annotation.RaceConstraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class RaceConstraintValidator implements ConstraintValidator<RaceConstraint, String> {
-    @Autowired
     private RaceService raceService;
 
     @Override

@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = RaceConstraintValidator.class)
 public @interface RaceConstraint {
-    String message() default "{wrong.race}";
+    String message() default "{wrong.character.race}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

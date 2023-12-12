@@ -1,6 +1,6 @@
 package dev.task.dndquest.service.impl;
 
-import dev.task.dndquest.exception.DBException;
+import dev.task.dndquest.exception.RaceNotFoundException;
 import dev.task.dndquest.model.entity.Race;
 import dev.task.dndquest.repository.RaceRepository;
 import dev.task.dndquest.service.RaceService;
@@ -14,8 +14,7 @@ public class RaceServiceImpl implements RaceService {
 
     @Override
     public Race findByName(String name) {
-        return repository.findByName(name)
-                .orElseThrow(() -> new DBException("no such race in database"));
+        return repository.findByName(name).orElseThrow(RaceNotFoundException::new);
     }
 
     @Override
