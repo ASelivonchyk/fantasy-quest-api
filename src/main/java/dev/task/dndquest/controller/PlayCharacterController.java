@@ -19,7 +19,8 @@ public class PlayCharacterController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void createCharacter(@Valid @RequestBody PlayCharacterRequestDto playCharacterDto){
-        playCharacterService.save(mapper.mapToEntity(playCharacterDto));
+    public void createCharacter(@Valid @RequestBody
+                                PlayCharacterRequestDto playCharacterDto){
+        playCharacterService.save(playCharacterDto);
     }
 }

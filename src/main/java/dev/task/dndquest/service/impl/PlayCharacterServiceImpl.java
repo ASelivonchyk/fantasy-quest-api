@@ -1,5 +1,8 @@
 package dev.task.dndquest.service.impl;
 
+import dev.task.dndquest.mapper.DtoMapper;
+import dev.task.dndquest.model.dto.PlayCharacterRequestDto;
+import dev.task.dndquest.model.dto.PlayCharacterResponseDto;
 import dev.task.dndquest.model.entity.PlayCharacter;
 import dev.task.dndquest.repository.PlayCharacterRepository;
 import dev.task.dndquest.service.PlayCharacterClassService;
@@ -14,11 +17,14 @@ public class PlayCharacterServiceImpl implements PlayCharacterService {
     private final PlayCharacterRepository repository;
     private final PlayCharacterClassService pccService;
     private final RaceService raceService;
+    private final DtoMapper<PlayCharacter,
+            PlayCharacterResponseDto, PlayCharacterRequestDto> mapper;
 
     @Override
-    public PlayCharacter save(PlayCharacter playCharacter) {
-        playCharacter.setClas(pccService.findByName(playCharacter.getClas().getName()));
-        playCharacter.setRace(raceService.findByName(playCharacter.getRace().getName()));
+    public PlayCharacter save(PlayCharacterRequestDto dto) {
+        PlayCharacter playCharacter = mapper.mapToEntity(dto);
+        playCharacter.setClas(pccService.findByName(dto.getPlayCharClass()));
+        playCharacter.setRace(raceService.findByName(dto.getPlayCharRace()));
         return repository.save(playCharacter);
     }
 }

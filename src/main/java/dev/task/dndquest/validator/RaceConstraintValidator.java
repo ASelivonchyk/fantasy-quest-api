@@ -4,11 +4,11 @@ import dev.task.dndquest.service.RaceService;
 import dev.task.dndquest.validator.annotation.RaceConstraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RaceConstraintValidator implements ConstraintValidator<RaceConstraint, String> {
-    private RaceService raceService;
+    private final RaceService raceService;
 
     @Override
     public void initialize(RaceConstraint constraintAnnotation) {

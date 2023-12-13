@@ -4,12 +4,12 @@ import dev.task.dndquest.service.PlayCharacterClassService;
 import dev.task.dndquest.validator.annotation.CharacterClassConstraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CharacterClassConstraintValidator
          implements ConstraintValidator<CharacterClassConstraint, String> {
-    private PlayCharacterClassService playCharacterClassService;
+    private final PlayCharacterClassService playCharacterClassService;
 
     @Override
     public void initialize(CharacterClassConstraint constraintAnnotation) {
