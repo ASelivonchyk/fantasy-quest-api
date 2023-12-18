@@ -2,6 +2,7 @@ package dev.task.dndquest.exception;
 
 import dev.task.dndquest.model.dto.ExceptionRequestDto;
 import java.util.stream.Collectors;
+import lombok.NonNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -17,8 +18,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex, HttpHeaders headers,
-            HttpStatusCode status, WebRequest request) {
+            MethodArgumentNotValidException ex, @NonNull HttpHeaders headers,
+            @NonNull HttpStatusCode status, @NonNull WebRequest request) {
         return ResponseEntity
                 .status(HttpStatus.PRECONDITION_FAILED)
                 .body(ex.getAllErrors().stream()
@@ -31,10 +32,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({CharNotFoundException.class, RaceNotFoundException.class})
     public ResponseEntity<Object> handleDBNotFoundExceptions(
-            CharNotFoundException ex, WebRequest request) {
+            Exception ex, WebRequest request) {
         return ResponseEntity
                 .status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body(new ExceptionRequestDto(
                         ex.getMessage(), HttpStatus.SERVICE_UNAVAILABLE));
+    }
+
+    @ExceptionHandler({PlayerNotFoundException.class, JwtAuthenticationException.class})
+    public ResponseEntity<Object> handleAuthenticationsExceptions(
+            Exception ex, WebRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ExceptionRequestDto(
+                        ex.getMessage(), HttpStatus.BAD_REQUEST));
     }
 }
