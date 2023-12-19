@@ -6,7 +6,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,15 +17,13 @@ import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
+@EnableConfigurationProperties(JwtProperties.class)
 public class JwtProvider {
     private static final String JWT_REQ_HEADER_NAME = "Authorization";
     private static final String JWT_REQ_START = "Bearer ";
     private static final int JWT_REQ_START_POSITION = 7;
-    @Value("${security.jwt.token.secret-key}")
-    private String secretKey;
-    @Value("${security.jwt.token.expire-length}")
-    private long validityTime;
     private final UserDetailsService userDetailsService;
+    private final JwtProperties jwtProperties;
 
     public String resolveToToken(HttpServletRequest req) {
         String bearerToken = req.getHeader(JWT_REQ_HEADER_NAME);
@@ -54,7 +52,7 @@ public class JwtProvider {
     public String generateToken(String login) {
         Claims claims = Jwts.claims().subject(login).build();
         Date issuedDate = new Date();
-        Date validity = new Date(issuedDate.getTime() + validityTime);
+        Date validity = new Date(issuedDate.getTime() + jwtProperties.validityTime());
         return Jwts.builder()
                 .claims()
                 .add(claims)
@@ -81,6 +79,6 @@ public class JwtProvider {
     }
 
     private SecretKey getSecretKey(){
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.secretKey()));
     }
 }

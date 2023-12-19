@@ -14,6 +14,6 @@ public class PlayerDtoMapper implements DtoMapper<Player, PlayerResponseDto, Pla
 
     @Override
     public Player mapToEntity(PlayerRequestDto dto) {
-        return  new Player(dto.getLogin(), dto.getPassword());
+        return new Player(dto.getLogin(), dto.getPassword());
     }
 }

@@ -20,7 +20,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponseDto login(PlayerRequestDto dto)
-            throws PlayerNotFoundException{
+            throws PlayerNotFoundException {
         Player player = playerService.findByLogin(dto.getLogin());
         if (!passwordEncoder.matches(dto.getPassword(), player.getPassword())) {
             throw new PlayerNotFoundException();

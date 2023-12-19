@@ -3,15 +3,15 @@ package dev.task.dndquest.controller;
 import dev.task.dndquest.model.dto.PlayCharacterRequestDto;
 import dev.task.dndquest.service.PlayCharacterService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/character")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PlayCharacterController {
-    PlayCharacterService playCharacterService;
+    private final PlayCharacterService playCharacterService;
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
