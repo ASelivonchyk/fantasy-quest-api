@@ -1,6 +1,6 @@
 package dev.task.dndquest.security.authentication;
 
-import dev.task.dndquest.exception.PlayerNotFoundException;
+import dev.task.dndquest.exception.BadCredentialsException;
 import dev.task.dndquest.model.dto.AuthenticationResponseDto;
 import dev.task.dndquest.model.dto.PlayerRequestDto;
 import dev.task.dndquest.model.entity.Player;
@@ -20,10 +20,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponseDto login(PlayerRequestDto dto)
-            throws PlayerNotFoundException {
+            throws BadCredentialsException {
         Player player = playerService.findByLogin(dto.getLogin());
         if (!passwordEncoder.matches(dto.getPassword(), player.getPassword())) {
-            throw new PlayerNotFoundException();
+            throw new BadCredentialsException();
         }
         String token = jwtProvider.generateToken(dto.getLogin());
         return new AuthenticationResponseDto(token, HttpStatus.OK);

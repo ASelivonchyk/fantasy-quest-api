@@ -39,7 +39,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                         ex.getMessage(), HttpStatus.SERVICE_UNAVAILABLE));
     }
 
-    @ExceptionHandler({PlayerNotFoundException.class, JwtAuthenticationException.class})
+    @ExceptionHandler({BadCredentialsException.class, JwtAuthenticationException.class})
     public ResponseEntity<Object> handleAuthenticationsExceptions(
             Exception ex, WebRequest request) {
         return ResponseEntity

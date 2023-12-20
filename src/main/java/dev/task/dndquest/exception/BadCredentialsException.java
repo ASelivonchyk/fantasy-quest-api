@@ -1,9 +1,9 @@
 package dev.task.dndquest.exception;
 
-public class PlayerNotFoundException extends RuntimeException{
+public class BadCredentialsException extends RuntimeException{
     private static final String EX_MESSAGE = "login or password incorrect";
 
-    public PlayerNotFoundException() {
+    public BadCredentialsException() {
         super(EX_MESSAGE);
     }
 }

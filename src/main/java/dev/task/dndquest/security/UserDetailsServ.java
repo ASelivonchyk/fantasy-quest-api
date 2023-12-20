@@ -1,6 +1,6 @@
 package dev.task.dndquest.security;
 
-import dev.task.dndquest.exception.PlayerNotFoundException;
+import dev.task.dndquest.exception.BadCredentialsException;
 import dev.task.dndquest.model.entity.Player;
 import dev.task.dndquest.service.PlayerService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ public class UserDetailsServ implements UserDetailsService {
     private final PlayerService playerService;
 
     @Override
-    public UserDetails loadUserByUsername(String login) throws PlayerNotFoundException {
+    public UserDetails loadUserByUsername(String login) throws BadCredentialsException {
       Player player = playerService.findByLogin(login);
       return User.withUsername(login)
                  .password(player.getPassword())

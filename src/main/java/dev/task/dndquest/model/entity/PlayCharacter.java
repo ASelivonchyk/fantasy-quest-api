@@ -1,24 +1,23 @@
 package dev.task.dndquest.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Entity
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
+@Table(name = "character")
 public class PlayCharacter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     @ManyToOne
-    private PlayCharacterClass clas;
+    @JoinColumn(name = "class_id")
+    private PlayCharacterClass playClass;
     @ManyToOne
+    @JoinColumn(name = "race_id")
     private Race race;
     private int strength;
     private int dexterity;
@@ -31,7 +30,7 @@ public class PlayCharacter {
                          int strength, int dexterity, int constitution, int intelligence,
                          int wisdom, int charisma) {
         this.name = name;
-        this.clas = clas;
+        this.playClass = clas;
         this.race = race;
         this.strength = strength;
         this.dexterity = dexterity;

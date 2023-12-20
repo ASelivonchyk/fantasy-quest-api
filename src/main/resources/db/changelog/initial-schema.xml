@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="initial-schema" author="Liquibase">
+        <createTable tableName="race">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar"/>
+        </createTable>
+
+        <createTable tableName="class">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar"/>
+        </createTable>
+
+        <createTable tableName="character">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar"/>
+            <column name="class_id" type="bigint"/>
+            <column name="race_id" type="bigint"/>
+            <column name="strength" type="int"/>
+            <column name="dexterity" type="int"/>
+            <column name="constitution" type="int"/>
+            <column name="intelligence" type="int"/>
+            <column name="wisdom" type="int"/>
+            <column name="charisma" type="int"/>
+        </createTable>
+
+        <createTable tableName="player">
+            <column name="id" type="bigint" autoIncrement="true" >
+                <constraints primaryKey="true" unique="true"/>
+            </column>
+            <column name="login" type="varchar">
+                <constraints unique="true"/>
+            </column>
+            <column name="password" type="varchar"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

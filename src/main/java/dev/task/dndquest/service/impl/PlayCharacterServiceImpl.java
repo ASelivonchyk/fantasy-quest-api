@@ -23,7 +23,7 @@ public class PlayCharacterServiceImpl implements PlayCharacterService {
     @Override
     public PlayCharacter save(PlayCharacterRequestDto dto) {
         PlayCharacter playCharacter = mapper.mapToEntity(dto);
-        playCharacter.setClas(pccService.findByName(dto.getPlayCharClass()));
+        playCharacter.setPlayClass(pccService.findByName(dto.getPlayCharClass()));
         playCharacter.setRace(raceService.findByName(dto.getPlayCharRace()));
         return repository.save(playCharacter);
     }
