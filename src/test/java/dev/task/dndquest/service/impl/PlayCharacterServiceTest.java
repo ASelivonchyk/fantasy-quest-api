@@ -46,6 +46,7 @@ class PlayCharacterServiceTest {
         race.setName("orc");
         playCharacter = new PlayCharacter(1L, "Tom", pcClass, race, 10, 10, 10, 10, 10, 10);
     }
+
     @Test
     void savePlayCharacterClass_ok() {
         when(mapper.mapToEntity(dto)).thenReturn(playCharacter);

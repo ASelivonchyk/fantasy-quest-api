@@ -39,7 +39,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                         ex.getMessage(), HttpStatus.SERVICE_UNAVAILABLE));
     }
 
-    @ExceptionHandler({BadCredentialsException.class, JwtAuthenticationException.class})
+    @ExceptionHandler({BadCredentialsException.class, JwtAuthenticationException.class,
+            DuplicateLoginException.class})
     public ResponseEntity<Object> handleAuthenticationsExceptions(
             Exception ex, WebRequest request) {
         return ResponseEntity

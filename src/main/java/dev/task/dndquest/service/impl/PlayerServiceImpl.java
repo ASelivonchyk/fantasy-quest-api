@@ -1,6 +1,7 @@
 package dev.task.dndquest.service.impl;
 
 import dev.task.dndquest.exception.BadCredentialsException;
+import dev.task.dndquest.exception.DuplicateLoginException;
 import dev.task.dndquest.mapper.DtoMapper;
 import dev.task.dndquest.model.dto.PlayerRequestDto;
 import dev.task.dndquest.model.dto.PlayerResponseDto;
@@ -21,6 +22,9 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Player save(PlayerRequestDto dto) {
+        if (repository.existsByLogin(dto.getLogin())) {
+            throw new DuplicateLoginException();
+        }
         Player player = mapper.mapToEntity(dto);
         player.setPassword(passwordEncoder.encode(dto.getPassword()));
         return repository.save(player);

@@ -13,6 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(locations = "classpath:application-test.properties")
 class PlayCharacterClassRepositoryTest {
+    private static final String TEST_CLASS_NAME = "fighter";
+    private static final String TEST_WRONG_CLASS_NAME = "notExist";
     @Autowired
     private PlayCharacterClassRepository repository;
     private static PlayCharacterClass existedClassInDB;
@@ -20,27 +22,27 @@ class PlayCharacterClassRepositoryTest {
     @BeforeAll
     static void init(){
         existedClassInDB = new PlayCharacterClass();
-        existedClassInDB.setName("fighter");
+        existedClassInDB.setName(TEST_CLASS_NAME);
         existedClassInDB.setId(1L);
     }
 
     @Test
     void whenClassExistInDB_thenFindByNameReturnOptionalWithClass_ok() {
-        assertThat(repository.findByName("fighter")).contains(existedClassInDB);
+        assertThat(repository.findByName(TEST_CLASS_NAME)).contains(existedClassInDB);
     }
 
     @Test
     void whenClassNotExistInDB_thenFindByNameReturnEmptyOptional_ok() {
-        assertThat(repository.findByName("notExist")).isEmpty();
+        assertThat(repository.findByName(TEST_WRONG_CLASS_NAME)).isEmpty();
     }
 
     @Test
     void whenClassExistsInDB_thenExistByNameReturnTrue_ok() {
-        assertThat(repository.existsByName("fighter")).isTrue();
+        assertThat(repository.existsByName(TEST_CLASS_NAME)).isTrue();
     }
 
     @Test
     void whenClassNotExistInDB_thenExistByNameReturnFalse_ok() {
-        assertThat(repository.existsByName("notExist")).isFalse();
+        assertThat(repository.existsByName(TEST_WRONG_CLASS_NAME)).isFalse();
     }
 }

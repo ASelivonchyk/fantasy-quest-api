@@ -17,6 +17,8 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RaceServiceTest {
+    private static final String TEST_RACE_NAME = "orc";
+    private static final String TEST_WRONG_RACE_NAME = "notExist";
     @Mock
     private RaceRepository repository;
     @InjectMocks
@@ -26,31 +28,32 @@ class RaceServiceTest {
     @BeforeAll
     static void init(){
         existedRaceInDB = new Race();
-        existedRaceInDB.setName("orc");
+        existedRaceInDB.setName(TEST_RACE_NAME);
         existedRaceInDB.setId(1L);
     }
 
     @Test
     void whenRaceExistInDB_thenReturnRace_ok() {
-        when(repository.findByName("orc")).thenReturn(Optional.of(existedRaceInDB));
-        assertThat(raceService.findByName("orc")).isEqualTo(existedRaceInDB);
+        when(repository.findByName(TEST_RACE_NAME)).thenReturn(Optional.of(existedRaceInDB));
+        assertThat(raceService.findByName(TEST_RACE_NAME)).isEqualTo(existedRaceInDB);
     }
 
     @Test
     void whenRaceNotExistInDB_thenThrowException_notOk() {
-        when(repository.findByName("notExist")).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> raceService.findByName("notExist")).isInstanceOf(RaceNotFoundException.class);
+        when(repository.findByName(TEST_WRONG_RACE_NAME)).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> raceService.findByName(TEST_WRONG_RACE_NAME))
+                .isInstanceOf(RaceNotFoundException.class);
     }
 
     @Test
     void whenRaceExistsInDB_thenReturnTrue_ok() {
-        when(repository.existsByName("orc")).thenReturn(true);
-        assertThat(raceService.existsByName("orc")).isTrue();
+        when(repository.existsByName(TEST_RACE_NAME)).thenReturn(true);
+        assertThat(raceService.existsByName(TEST_RACE_NAME)).isTrue();
     }
 
     @Test
     void whenRaceNotExistInDB_thenReturnFalse_ok() {
-        when(repository.existsByName("notExist")).thenReturn(false);
-        assertThat(raceService.existsByName("notExist")).isFalse();
+        when(repository.existsByName(TEST_WRONG_RACE_NAME)).thenReturn(false);
+        assertThat(raceService.existsByName(TEST_WRONG_RACE_NAME)).isFalse();
     }
 }

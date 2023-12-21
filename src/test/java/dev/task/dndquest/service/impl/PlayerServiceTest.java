@@ -1,6 +1,7 @@
 package dev.task.dndquest.service.impl;
 
 import dev.task.dndquest.exception.BadCredentialsException;
+import dev.task.dndquest.exception.DuplicateLoginException;
 import dev.task.dndquest.mapper.DtoMapper;
 import dev.task.dndquest.model.dto.PlayerRequestDto;
 import dev.task.dndquest.model.dto.PlayerResponseDto;
@@ -21,6 +22,9 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PlayerServiceTest {
+    private static final String TEST_LOGIN = "Tom";
+    private static final String TEST_PASS = "qwerty12";
+    private static final String ENCODED_PASSWORD = "encodedPassword";
     @Mock
     PasswordEncoder passwordEncoder;
     @Mock
@@ -32,44 +36,50 @@ class PlayerServiceTest {
     private PlayerServiceImpl service;
     private static PlayerRequestDto dto;
     private static Player player;
-    private static String encodedPassword;
 
     @BeforeAll
     static void init() {
-        dto = new PlayerRequestDto("Tom", "qwerty12");
-        player = new Player(1L, "Tom", "qwerty12");
-        encodedPassword = "encodedPassword";
+        dto = new PlayerRequestDto(TEST_LOGIN, TEST_PASS);
+        player = new Player(1L, TEST_LOGIN, TEST_PASS);
     }
 
     @Test
-    void whenSavePlayer_thenReturnPlayer_ok() {
+    void whenSaveNewPlayer_thenReturnPlayer_ok() {
+        when(repository.existsByLogin(dto.getLogin())).thenReturn(false);
         when(mapper.mapToEntity(dto)).thenReturn(player);
-        when(passwordEncoder.encode(dto.getPassword())).thenReturn(encodedPassword);
+        when(passwordEncoder.encode(dto.getPassword())).thenReturn(ENCODED_PASSWORD);
         when(repository.save(player)).thenReturn(player);
         assertThat(service.save(dto)).isEqualTo(player);
     }
 
     @Test
+    void whenSavePlayerWithDuplicateLogin_thenThrowException_notOk() {
+        when(repository.existsByLogin(dto.getLogin())).thenReturn(true);
+        assertThatThrownBy(() -> service.save(dto)).isInstanceOf(DuplicateLoginException.class);
+    }
+
+    @Test
     void whenFindByLoginAndPlayerExistInDB_thenReturnPlayer_ok() {
-        when(repository.findByLogin("Tom")).thenReturn(Optional.of(player));
-        assertThat(service.findByLogin("Tom")).isEqualTo(player);
+        when(repository.findByLogin(TEST_LOGIN)).thenReturn(Optional.of(player));
+        assertThat(service.findByLogin(TEST_LOGIN)).isEqualTo(player);
     }
 
     @Test
     void whenFindByLoginAndPlayerNotExistInDB_thenThrowException_notOk() {
-        when(repository.findByLogin("notExist")).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> service.findByLogin("notExist")).isInstanceOf(BadCredentialsException.class);
+        when(repository.findByLogin(TEST_LOGIN)).thenReturn(Optional.empty());
+        assertThatThrownBy(() ->
+                service.findByLogin(TEST_LOGIN)).isInstanceOf(BadCredentialsException.class);
     }
 
     @Test
     void whenExistByLoginAndPlayerExistsInDB_thenReturnTrue_ok() {
-        when(repository.existsByLogin("Tom")).thenReturn(true);
-        assertThat(service.existsByLogin("Tom")).isTrue();
+        when(repository.existsByLogin(TEST_LOGIN)).thenReturn(true);
+        assertThat(service.existsByLogin(TEST_LOGIN)).isTrue();
     }
 
     @Test
     void whenExistByLoginAndPlayerNotExistsInDB_thenReturnFalse_ok() {
-        when(repository.existsByLogin("notExist")).thenReturn(false);
-        assertThat(service.existsByLogin("notExist")).isFalse();
+        when(repository.existsByLogin(TEST_LOGIN)).thenReturn(false);
+        assertThat(service.existsByLogin(TEST_LOGIN)).isFalse();
     }
 }
