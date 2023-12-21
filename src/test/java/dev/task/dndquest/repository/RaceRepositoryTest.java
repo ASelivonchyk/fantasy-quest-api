@@ -32,23 +32,22 @@ class RaceRepositoryTest {
     }
 
     @Test
-    void whenRaceExistInDB_thenReturnOptionalWithRace_ok() {
-        System.out.println(repository.findAll());
+    void whenRaceExistInDB_thenFindByNameReturnOptionalWithRace_ok() {
         assertThat(repository.findByName("orc")).contains(existedRaceInDB);
     }
 
     @Test
-    void whenRaceNotExistInDB_thenReturnEmptyOptional_ok() {
+    void whenRaceNotExistInDB_thenFindByNameReturnEmptyOptional_ok() {
         assertThat(repository.findByName("notExist")).isEmpty();
     }
 
     @Test
-    void whenRaceExistsInDB_thenReturnTrue_ok() {
+    void whenRaceExistsInDB_thenExistByNameReturnTrue_ok() {
         assertThat(repository.existsByName("orc")).isTrue();
     }
 
     @Test
-    void whenRaceNotExistInDB_thenReturnFalse_ok() {
+    void whenRaceNotExistInDB_thenExistByNameReturnFalse_ok() {
         assertThat(repository.existsByName("notExist")).isFalse();
     }
 }

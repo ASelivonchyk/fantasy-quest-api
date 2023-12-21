@@ -25,22 +25,22 @@ class PlayCharacterClassRepositoryTest {
     }
 
     @Test
-    void whenClassExistInDB_thenReturnOptionalWithClass_ok() {
+    void whenClassExistInDB_thenFindByNameReturnOptionalWithClass_ok() {
         assertThat(repository.findByName("fighter")).contains(existedClassInDB);
     }
 
     @Test
-    void whenClassNotExistInDB_thenReturnEmptyOptional_ok() {
+    void whenClassNotExistInDB_thenFindByNameReturnEmptyOptional_ok() {
         assertThat(repository.findByName("notExist")).isEmpty();
     }
 
     @Test
-    void whenClassExistsInDB_thenReturnTrue_ok() {
+    void whenClassExistsInDB_thenExistByNameReturnTrue_ok() {
         assertThat(repository.existsByName("fighter")).isTrue();
     }
 
     @Test
-    void whenClassNotExistInDB_thenReturnFalse_ok() {
+    void whenClassNotExistInDB_thenExistByNameReturnFalse_ok() {
         assertThat(repository.existsByName("notExist")).isFalse();
     }
 }
