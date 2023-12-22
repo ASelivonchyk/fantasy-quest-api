@@ -1,10 +1,12 @@
 package dev.task.dndquest.mapper;
 
+import dev.task.dndquest.model.dto.ItemResponseDto;
 import dev.task.dndquest.model.dto.PlayCharacterRequestDto;
 import dev.task.dndquest.model.dto.PlayCharacterResponseDto;
 import dev.task.dndquest.model.entity.PlayCharacter;
 import dev.task.dndquest.model.entity.PlayCharacterClass;
 import dev.task.dndquest.model.entity.Race;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,7 +14,19 @@ public class PlayCharacterDtoMapper
         implements DtoMapper<PlayCharacter, PlayCharacterResponseDto, PlayCharacterRequestDto> {
     @Override
     public PlayCharacterResponseDto matToDto(PlayCharacter entity) {
-        return null;
+
+        return new PlayCharacterResponseDto(entity.getName(),
+                entity.getPlayClass().getName(),
+                entity.getRace().getName(),
+                entity.getStrength(),
+                entity.getDexterity(),
+                entity.getConstitution(),
+                entity.getIntelligence(),
+                entity.getWisdom(),
+                entity.getCharisma(),
+                entity.getItems().entrySet().stream()
+                        .map(e -> new ItemResponseDto(e.getKey().getName(), e.getValue()))
+                        .collect(Collectors.toList()));
     }
 
     @Override

@@ -1,6 +1,6 @@
 package dev.task.dndquest.exception;
 
-import dev.task.dndquest.model.dto.ExceptionRequestDto;
+import dev.task.dndquest.model.dto.ExceptionResponseDto;
 import java.util.stream.Collectors;
 import lombok.NonNull;
 import org.springframework.http.HttpHeaders;
@@ -23,19 +23,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.PRECONDITION_FAILED)
                 .body(ex.getAllErrors().stream()
-                                       .map(e -> new ExceptionRequestDto(
+                                       .map(e -> new ExceptionResponseDto(
                                                e.getDefaultMessage(),
                                                HttpStatus.PRECONDITION_FAILED))
                                        .distinct()
                                        .collect(Collectors.toList()));
     }
 
-    @ExceptionHandler({CharNotFoundException.class, RaceNotFoundException.class})
+    @ExceptionHandler({CharNotFoundException.class, RaceNotFoundException.class,
+            ItemNotFoundException.class, ClassNotFoundException.class})
     public ResponseEntity<Object> handleDBNotFoundExceptions(
             Exception ex, WebRequest request) {
         return ResponseEntity
                 .status(HttpStatus.SERVICE_UNAVAILABLE)
-                .body(new ExceptionRequestDto(
+                .body(new ExceptionResponseDto(
                         ex.getMessage(), HttpStatus.SERVICE_UNAVAILABLE));
     }
 
@@ -45,7 +46,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             Exception ex, WebRequest request) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ExceptionRequestDto(
+                .body(new ExceptionResponseDto(
                         ex.getMessage(), HttpStatus.BAD_REQUEST));
     }
 }

@@ -1,6 +1,8 @@
 package dev.task.dndquest.controller;
 
+import dev.task.dndquest.model.dto.ItemRequestDto;
 import dev.task.dndquest.model.dto.PlayCharacterRequestDto;
+import dev.task.dndquest.model.dto.PlayCharacterResponseDto;
 import dev.task.dndquest.service.PlayCharacterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,5 +20,11 @@ public class PlayCharacterController {
     public void createCharacter(@Valid @RequestBody
                                 PlayCharacterRequestDto playCharacterDto){
         playCharacterService.save(playCharacterDto);
+    }
+
+    @PutMapping
+    public PlayCharacterResponseDto addItem(@RequestParam Long id,
+                                            @RequestBody ItemRequestDto dto) {
+        return playCharacterService.addItem(id, dto);
     }
 }

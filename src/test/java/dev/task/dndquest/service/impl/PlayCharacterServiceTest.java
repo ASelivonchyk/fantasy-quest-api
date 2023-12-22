@@ -16,6 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashMap;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -44,7 +46,7 @@ class PlayCharacterServiceTest {
         pcClass.setName("fighter");
         race = new Race();
         race.setName("orc");
-        playCharacter = new PlayCharacter(1L, "Tom", pcClass, race, 10, 10, 10, 10, 10, 10);
+        playCharacter = new PlayCharacter(1L, "Tom", pcClass, race, 10, 10, 10, 10, 10, 10, new HashMap<>());
     }
 
     @Test
