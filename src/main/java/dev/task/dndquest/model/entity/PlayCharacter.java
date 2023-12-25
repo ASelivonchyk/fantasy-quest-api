@@ -1,28 +1,28 @@
 package dev.task.dndquest.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "character")
 public class PlayCharacter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "Enter character name")
-    @Size(min = 3, max = 50, message = "Name should be greater than 3 letter and shorter than 50")
     private String name;
     @ManyToOne
-    private PlayCharacterClass clas;
+    @JoinColumn(name = "class_id")
+    private PlayCharacterClass playClass;
     @ManyToOne
+    @JoinColumn(name = "race_id")
     private Race race;
     private int strength;
     private int dexterity;
@@ -30,12 +30,18 @@ public class PlayCharacter {
     private int intelligence;
     private int wisdom;
     private int charisma;
+    @ElementCollection
+    @CollectionTable(name = "inventory",
+            joinColumns = @JoinColumn(name = "character_id"))
+    @MapKeyJoinColumn(name = "items_id")
+    @Column(name = "items_count")
+    private Map<Item, Integer> items;
 
     public PlayCharacter(String name, PlayCharacterClass clas, Race race,
                          int strength, int dexterity, int constitution, int intelligence,
                          int wisdom, int charisma) {
         this.name = name;
-        this.clas = clas;
+        this.playClass = clas;
         this.race = race;
         this.strength = strength;
         this.dexterity = dexterity;
@@ -43,5 +49,6 @@ public class PlayCharacter {
         this.intelligence = intelligence;
         this.wisdom = wisdom;
         this.charisma = charisma;
+        this.items = new HashMap<>();
     }
 }

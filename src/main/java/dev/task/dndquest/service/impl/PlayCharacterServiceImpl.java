@@ -1,31 +1,52 @@
 package dev.task.dndquest.service.impl;
 
-import dev.task.dndquest.exception.DBException;
+import dev.task.dndquest.exception.CharNotFoundException;
+import dev.task.dndquest.mapper.DtoMapper;
+import dev.task.dndquest.model.dto.ItemRequestDto;
+import dev.task.dndquest.model.dto.PlayCharacterRequestDto;
+import dev.task.dndquest.model.dto.PlayCharacterResponseDto;
+import dev.task.dndquest.model.entity.Item;
 import dev.task.dndquest.model.entity.PlayCharacter;
-import dev.task.dndquest.model.entity.PlayCharacterClass;
-import dev.task.dndquest.model.entity.Race;
-import dev.task.dndquest.repository.PlayCharacterClassRepository;
 import dev.task.dndquest.repository.PlayCharacterRepository;
-import dev.task.dndquest.repository.RaceRepository;
+import dev.task.dndquest.service.ItemService;
+import dev.task.dndquest.service.PlayCharacterClassService;
 import dev.task.dndquest.service.PlayCharacterService;
-import lombok.AllArgsConstructor;
+import dev.task.dndquest.service.RaceService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PlayCharacterServiceImpl implements PlayCharacterService {
     private final PlayCharacterRepository repository;
-    private final PlayCharacterClassRepository pccRepository;
-    private final RaceRepository raceRepository;
+    private final PlayCharacterClassService classService;
+    private final RaceService raceService;
+    private final ItemService itemService;
+    private final DtoMapper<PlayCharacter,
+            PlayCharacterResponseDto, PlayCharacterRequestDto> mapper;
 
     @Override
-    public PlayCharacter save(PlayCharacter playCharacter) {
-        PlayCharacterClass characterClass = pccRepository.findByName(playCharacter.getClas().getName())
-                .orElseThrow(() -> new DBException("no such character class in database"));
-        Race race = raceRepository.findByName(playCharacter.getRace().getName())
-                .orElseThrow(() -> new DBException("no such race in database"));
-        playCharacter.setClas(characterClass);
-        playCharacter.setRace(race);
+    public PlayCharacter save(PlayCharacterRequestDto dto) {
+        PlayCharacter playCharacter = mapper.mapToEntity(dto);
+        playCharacter.setPlayClass(classService.findByName(dto.getPlayCharClass()));
+        playCharacter.setRace(raceService.findByName(dto.getPlayCharRace()));
         return repository.save(playCharacter);
+    }
+
+    @Override
+    public PlayCharacterResponseDto addItem(Long characterId, ItemRequestDto dto) {
+        PlayCharacter character = repository.findById(characterId)
+                                            .orElseThrow(CharNotFoundException::new);
+        addItemsToInventory(character, dto);
+        return mapper.matToDto(repository.save(character));
+    }
+
+    private void addItemsToInventory(PlayCharacter character, ItemRequestDto dto){
+        Item item = itemService.findByName(dto.getName());
+        Map<Item, Integer> items = character.getItems();
+        int itemCount = items.get(item) == null ? 0 : items.get(item);
+        items.put(item, dto.getCount() + itemCount);
     }
 }

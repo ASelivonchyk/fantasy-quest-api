@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - include:
+      # schema
+      file: initial-schema.xml
+      relativeToChangelogFile: true
+  - include:
+      # initial data
+      file: initial-data.xml
+      relativeToChangelogFile: true
+  - include:
+      # inventory schema
+      file: add-inventory-schema.xml
+      relativeToChangelogFile: true
+  - include:
+      # add preload items data
+      file: add-item-data.xml
+      relativeToChangelogFile: true

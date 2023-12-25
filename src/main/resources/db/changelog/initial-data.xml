@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="initial-data" author="Liquibase">
+        <insert tableName="class">
+            <column name="name" value="fighter"/>
+        </insert>
+        <insert tableName="class">
+            <column name="name" value="mag"/>
+        </insert>
+        <insert tableName="class">
+            <column name="name" value="archer"/>
+        </insert>
+        <insert tableName="class">
+            <column name="name" value="thief"/>
+        </insert>
+        <insert tableName="race">
+            <column name="name" value="orc"/>
+        </insert>
+        <insert tableName="race">
+            <column name="name" value="human"/>
+        </insert>
+        <insert tableName="race">
+            <column name="name" value="elf"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
