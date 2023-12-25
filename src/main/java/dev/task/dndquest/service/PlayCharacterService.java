@@ -1,11 +1,13 @@
 package dev.task.dndquest.service;
 
-import dev.task.dndquest.model.dto.ItemRequestDto;
-import dev.task.dndquest.model.dto.PlayCharacterRequestDto;
-import dev.task.dndquest.model.dto.PlayCharacterResponseDto;
+import dev.task.dndquest.model.dto.request.InventoryRequestDto;
+import dev.task.dndquest.model.dto.request.PlayCharacterRequestDto;
+import dev.task.dndquest.model.dto.response.InventoryResponseDto;
 import dev.task.dndquest.model.entity.PlayCharacter;
+import java.util.List;
 
 public interface PlayCharacterService {
     PlayCharacter save(PlayCharacterRequestDto dto);
-    PlayCharacterResponseDto addItem(Long characterId, ItemRequestDto dto);
+    List<InventoryResponseDto> manageItem(Long characterId, InventoryRequestDto dto);
+    List<InventoryResponseDto> getAllItems(Long characterId);
 }

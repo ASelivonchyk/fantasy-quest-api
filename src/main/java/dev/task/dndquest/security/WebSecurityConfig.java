@@ -26,6 +26,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private static final int STRENGTH = 10;
+    private static final String[] ALLOWED_URL =
+            {"/api/player/register", "/api/player/login"};
     private final UserDetailsService userService;
     private final JwtFilter jwtFilter;
 
@@ -48,7 +50,7 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
                         .dispatcherTypeMatchers(FORWARD, ERROR).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/player/register", "/api/player/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, ALLOWED_URL).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

@@ -1,7 +1,7 @@
 package dev.task.dndquest.controller;
 
 import dev.task.dndquest.TestWebSecurityConfig;
-import dev.task.dndquest.model.dto.PlayCharacterRequestDto;
+import dev.task.dndquest.model.dto.request.PlayCharacterRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

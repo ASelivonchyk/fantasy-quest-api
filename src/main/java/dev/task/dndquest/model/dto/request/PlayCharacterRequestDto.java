@@ -1,4 +1,4 @@
-package dev.task.dndquest.model.dto;
+package dev.task.dndquest.model.dto.request;
 
 import dev.task.dndquest.validator.annotation.CharacterClassConstraint;
 import dev.task.dndquest.validator.annotation.PlayCharacterStatConstraint;
