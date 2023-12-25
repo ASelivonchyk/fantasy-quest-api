@@ -2,9 +2,11 @@ package dev.task.dndquest.service.impl;
 
 import dev.task.dndquest.exception.CharNotFoundException;
 import dev.task.dndquest.mapper.DtoMapper;
-import dev.task.dndquest.model.dto.ItemRequestDto;
-import dev.task.dndquest.model.dto.PlayCharacterRequestDto;
-import dev.task.dndquest.model.dto.PlayCharacterResponseDto;
+import dev.task.dndquest.model.ItemOperations;
+import dev.task.dndquest.model.dto.request.InventoryRequestDto;
+import dev.task.dndquest.model.dto.request.PlayCharacterRequestDto;
+import dev.task.dndquest.model.dto.response.InventoryResponseDto;
+import dev.task.dndquest.model.dto.response.PlayCharacterResponseDto;
 import dev.task.dndquest.model.entity.Item;
 import dev.task.dndquest.model.entity.PlayCharacter;
 import dev.task.dndquest.repository.PlayCharacterRepository;
@@ -12,10 +14,10 @@ import dev.task.dndquest.service.ItemService;
 import dev.task.dndquest.service.PlayCharacterClassService;
 import dev.task.dndquest.service.PlayCharacterService;
 import dev.task.dndquest.service.RaceService;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -36,17 +38,26 @@ public class PlayCharacterServiceImpl implements PlayCharacterService {
     }
 
     @Override
-    public PlayCharacterResponseDto addItem(Long characterId, ItemRequestDto dto) {
+    public List<InventoryResponseDto> manageItem(Long characterId, InventoryRequestDto dto) {
         PlayCharacter character = repository.findById(characterId)
                                             .orElseThrow(CharNotFoundException::new);
-        addItemsToInventory(character, dto);
-        return mapper.matToDto(repository.save(character));
+        applyOperationWithItems(character, dto);
+        return mapper.matToDto(repository.save(character)).getItems();
     }
 
-    private void addItemsToInventory(PlayCharacter character, ItemRequestDto dto){
-        Item item = itemService.findByName(dto.getName());
-        Map<Item, Integer> items = character.getItems();
-        int itemCount = items.get(item) == null ? 0 : items.get(item);
-        items.put(item, dto.getCount() + itemCount);
+    @Override
+    public List<InventoryResponseDto> getAllItems(Long characterId) {
+        PlayCharacter character = repository.findById(characterId).orElseThrow(CharNotFoundException::new);
+        return mapper.matToDto(character).getItems();
+    }
+
+    private void applyOperationWithItems(PlayCharacter character, InventoryRequestDto dto){
+        Item item = itemService.findByName(dto.getItem());
+        Map<Item, Integer> itemsInInventory = character.getItems();
+        Integer itemsCount = itemsInInventory.get(item) == null ? 0 : itemsInInventory.get(item);
+        Integer totalItemsCount = ItemOperations.getMap()
+                .get(dto.getOperation())
+                .applyOperation(itemsCount, dto.getCount());
+        itemsInInventory.put(item, totalItemsCount);
     }
 }

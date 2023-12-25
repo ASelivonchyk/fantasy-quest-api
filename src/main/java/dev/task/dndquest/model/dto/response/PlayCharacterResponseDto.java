@@ -1,9 +1,8 @@
-package dev.task.dndquest.model.dto;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+package dev.task.dndquest.model.dto.response;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
@@ -17,5 +16,5 @@ public class PlayCharacterResponseDto {
     private int intelligence;
     private int wisdom;
     private int charisma;
-    private List<ItemResponseDto> items;
+    private List<InventoryResponseDto> items;
 }

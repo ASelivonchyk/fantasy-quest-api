@@ -1,4 +1,4 @@
-package dev.task.dndquest.model.dto;
+package dev.task.dndquest.model.dto.request;
 
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;

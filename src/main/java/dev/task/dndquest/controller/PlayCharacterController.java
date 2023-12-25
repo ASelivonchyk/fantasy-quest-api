@@ -1,12 +1,14 @@
 package dev.task.dndquest.controller;
 
-import dev.task.dndquest.model.dto.ItemRequestDto;
-import dev.task.dndquest.model.dto.PlayCharacterRequestDto;
-import dev.task.dndquest.model.dto.PlayCharacterResponseDto;
+import dev.task.dndquest.model.dto.request.InventoryRequestDto;
+import dev.task.dndquest.model.dto.request.PlayCharacterRequestDto;
+import dev.task.dndquest.model.dto.response.InventoryResponseDto;
 import dev.task.dndquest.service.PlayCharacterService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,9 +24,14 @@ public class PlayCharacterController {
         playCharacterService.save(playCharacterDto);
     }
 
-    @PutMapping
-    public PlayCharacterResponseDto addItem(@RequestParam Long id,
-                                            @RequestBody ItemRequestDto dto) {
-        return playCharacterService.addItem(id, dto);
+    @PutMapping("/{id}/inventory")
+    public ResponseEntity<List<InventoryResponseDto>> manageItem(@PathVariable Long id,
+                                                                 @Valid @RequestBody InventoryRequestDto dto) {
+        return ResponseEntity.ok(playCharacterService.manageItem(id, dto));
+    }
+
+    @GetMapping("/{id}/inventory")
+    public ResponseEntity<List<InventoryResponseDto>> getAllItems(@PathVariable Long id){
+        return ResponseEntity.ok(playCharacterService.getAllItems(id));
     }
 }

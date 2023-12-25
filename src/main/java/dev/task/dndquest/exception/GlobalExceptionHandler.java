@@ -1,6 +1,6 @@
 package dev.task.dndquest.exception;
 
-import dev.task.dndquest.model.dto.ExceptionResponseDto;
+import dev.task.dndquest.model.dto.response.ExceptionResponseDto;
 import java.util.stream.Collectors;
 import lombok.NonNull;
 import org.springframework.http.HttpHeaders;
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({BadCredentialsException.class, JwtAuthenticationException.class,
-            DuplicateLoginException.class})
+            DuplicateLoginException.class, IllegalArgumentException.class})
     public ResponseEntity<Object> handleAuthenticationsExceptions(
             Exception ex, WebRequest request) {
         return ResponseEntity

@@ -1,6 +1,6 @@
 package dev.task.dndquest.controller;
 
-import dev.task.dndquest.model.dto.PlayerRequestDto;
+import dev.task.dndquest.model.dto.request.PlayerRequestDto;
 import dev.task.dndquest.security.authentication.AuthenticationService;
 import dev.task.dndquest.service.PlayerService;
 import jakarta.validation.Valid;
