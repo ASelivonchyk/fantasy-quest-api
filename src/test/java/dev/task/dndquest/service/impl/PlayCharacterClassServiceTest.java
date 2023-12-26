@@ -1,7 +1,7 @@
 package dev.task.dndquest.service.impl;
 
 import java.util.Optional;
-import dev.task.dndquest.exception.CharNotFoundException;
+import dev.task.dndquest.exception.ClassNotFoundException;
 import dev.task.dndquest.model.entity.PlayCharacterClass;
 import dev.task.dndquest.repository.PlayCharacterClassRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -41,7 +41,7 @@ class PlayCharacterClassServiceTest {
     void whenClassNotExistInDB_thenThrowException_notOk() {
         when(repository.findByName(TEST_WRONG_CLASS_NAME)).thenReturn(Optional.empty());
         assertThatThrownBy(() -> playCharacterClassService.findByName(TEST_WRONG_CLASS_NAME))
-                .isInstanceOf(CharNotFoundException.class);
+                .isInstanceOf(ClassNotFoundException.class);
     }
 
     @Test

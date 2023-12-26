@@ -1,6 +1,6 @@
 package dev.task.dndquest.exception;
 
-import dev.task.dndquest.model.dto.ExceptionResponseDto;
+import dev.task.dndquest.model.dto.response.ExceptionResponseDto;
 import java.util.stream.Collectors;
 import lombok.NonNull;
 import org.springframework.http.HttpHeaders;
@@ -24,8 +24,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .status(HttpStatus.PRECONDITION_FAILED)
                 .body(ex.getAllErrors().stream()
                                        .map(e -> new ExceptionResponseDto(
-                                               e.getDefaultMessage(),
-                                               HttpStatus.PRECONDITION_FAILED))
+                                               e.getDefaultMessage()))
                                        .distinct()
                                        .collect(Collectors.toList()));
     }
@@ -37,16 +36,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body(new ExceptionResponseDto(
-                        ex.getMessage(), HttpStatus.SERVICE_UNAVAILABLE));
+                        ex.getMessage()));
     }
 
     @ExceptionHandler({BadCredentialsException.class, JwtAuthenticationException.class,
-            DuplicateLoginException.class})
+            DuplicateLoginException.class, IllegalArgumentException.class})
     public ResponseEntity<Object> handleAuthenticationsExceptions(
             Exception ex, WebRequest request) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionResponseDto(
-                        ex.getMessage(), HttpStatus.BAD_REQUEST));
+                        ex.getMessage()));
     }
 }

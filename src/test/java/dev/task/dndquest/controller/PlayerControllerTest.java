@@ -1,6 +1,6 @@
 package dev.task.dndquest.controller;
 
-import dev.task.dndquest.model.dto.PlayerRequestDto;
+import dev.task.dndquest.model.dto.request.PlayerRequestDto;
 import dev.task.dndquest.model.entity.Player;
 import dev.task.dndquest.repository.PlayerRepository;
 import dev.task.dndquest.service.PlayerService;

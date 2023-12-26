@@ -1,8 +1,8 @@
 package dev.task.dndquest.service.impl;
 
 import dev.task.dndquest.mapper.DtoMapper;
-import dev.task.dndquest.model.dto.PlayCharacterRequestDto;
-import dev.task.dndquest.model.dto.PlayCharacterResponseDto;
+import dev.task.dndquest.model.dto.request.PlayCharacterRequestDto;
+import dev.task.dndquest.model.dto.response.PlayCharacterResponseDto;
 import dev.task.dndquest.model.entity.PlayCharacter;
 import dev.task.dndquest.model.entity.PlayCharacterClass;
 import dev.task.dndquest.model.entity.Race;

@@ -1,10 +1,10 @@
-package dev.task.dndquest.model.dto;
+package dev.task.dndquest.model.dto.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import org.springframework.http.HttpStatusCode;
 
-@Data
+@Getter
 @AllArgsConstructor
 public class AuthenticationResponseDto {
     private String token;
