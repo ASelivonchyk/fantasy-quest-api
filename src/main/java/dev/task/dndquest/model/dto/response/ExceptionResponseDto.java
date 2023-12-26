@@ -2,11 +2,11 @@ package dev.task.dndquest.model.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.HttpStatusCode;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ExceptionResponseDto {
     private String message;
-    private HttpStatusCode status;
 }
