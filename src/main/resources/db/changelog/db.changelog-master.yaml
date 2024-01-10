@@ -15,3 +15,7 @@ databaseChangeLog:
       # add preload items data
       file: add-item-data.xml
       relativeToChangelogFile: true
+  - include:
+      # game schema
+      file: add-adventure-schema.xml
+      relativeToChangelogFile: true

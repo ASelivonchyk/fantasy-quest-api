@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="addTable-creature" author="Liquibase">
+        <createTable tableName="creatures">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="type" type="varchar"/>
+            <column name="name" type="varchar"/>
+            <column name="description" type="varchar"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="addTable-interaction" author="Liquibase">
+        <createTable tableName="interactions">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="action" type="varchar"/>
+            <column name="skill" type="varchar"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="addTable-interactionResults" author="Liquibase">
+        <createTable tableName="interaction_results">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="action" type="varchar"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="addTable-creature-interaction" author="Liquibase">
+        <createTable tableName="creature_interaction">
+            <column name="creature_id" type="bigint">
+                <constraints foreignKeyName="id" referencedTableName="creatures"/>
+            </column>
+            <column name="interaction_id" type="bigint">
+                <constraints foreignKeyName="id" referencedTableName="interactions"/>
+            </column>
+            <column name="interaction_result_id" type="bigint">
+                <constraints foreignKeyName="id" referencedTableName="interaction_results"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="addTable-storyline" author="Liquibase">
+        <createTable tableName="storylines">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="varchar"/>
+            <column name="description" type="varchar"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="addTable-story" author="Liquibase">
+        <createTable tableName="stories">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="description" type="varchar"/>
+            <column name="place_type" type="varchar"/>
+            <column name="storyline_part" type="integer"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="addTable-storyline_story" author="Liquibase">
+        <createTable tableName="storylines_stories">
+            <column name="storyline_id" type="bigint">
+                <constraints foreignKeyName="id" referencedTableName="storylines"/>
+            </column>
+            <column name="story_id" type="bigint">
+                <constraints foreignKeyName="id" referencedTableName="stories"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="addTable-creature-story" author="Liquibase">
+        <createTable tableName="creatures_stories">
+            <column name="creature_id" type="bigint">
+                <constraints foreignKeyName="id" referencedTableName="creatures"/>
+            </column>
+            <column name="story_id" type="bigint">
+                <constraints foreignKeyName="id" referencedTableName="stories"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="addTable-next_story_call" author="Liquibase">
+        <createTable tableName="next_story_call">
+            <column name="story_id" type="bigint">
+                <constraints foreignKeyName="id" referencedTableName="stories"/>
+            </column>
+            <column name="creature_id" type="bigint">
+                <constraints foreignKeyName="id" referencedTableName="creatures"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="addTable-adventure" author="Liquibase">
+        <createTable tableName="adventures">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="story_line_id" type="bigint">
+                <constraints foreignKeyName="id" referencedTableName="storylines"/>
+            </column>
+            <column name="current_story_id" type="bigint">
+                <constraints foreignKeyName="id" referencedTableName="stories"/>
+            </column>
+            <column name="current_story_part" type="integer"/>
+            <column name="scene_count" type="integer"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="addTable-characters-adventure" author="Liquibase">
+        <createTable tableName="characters_games">
+            <column name="character_id" type="bigint">
+                <constraints foreignKeyName="id" referencedTableName="character"/>
+            </column>
+            <column name="adventure_id" type="bigint">
+                <constraints foreignKeyName="id" referencedTableName="adventures"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

@@ -6,7 +6,6 @@ import dev.task.dndquest.model.dto.response.PlayCharacterResponseDto;
 import dev.task.dndquest.model.entity.PlayCharacter;
 import dev.task.dndquest.model.entity.PlayCharacterClass;
 import dev.task.dndquest.model.entity.Race;
-import java.util.HashMap;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +36,6 @@ public class PlayCharacterDtoMapper
         Race race = new Race();
         race.setName(dto.getPlayCharRace());
         return new PlayCharacter(
-                null,
                 dto.getName(),
                 playCharacterClass,
                 race,
@@ -46,7 +44,6 @@ public class PlayCharacterDtoMapper
                 dto.getConstitution(),
                 dto.getIntelligence(),
                 dto.getWisdom(),
-                dto.getCharisma(),
-                new HashMap<>());
+                dto.getCharisma());
     }
 }
