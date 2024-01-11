@@ -1,6 +1,6 @@
 package dev.task.dndquest.repository;
 
-import dev.task.dndquest.model.entity.PlayCharacterClass;
+import dev.task.dndquest.model.entity.character.PlayCharacterClass;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

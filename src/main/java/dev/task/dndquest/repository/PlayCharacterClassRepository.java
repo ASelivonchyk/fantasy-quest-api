@@ -1,6 +1,6 @@
 package dev.task.dndquest.repository;
 
-import dev.task.dndquest.model.entity.PlayCharacterClass;
+import dev.task.dndquest.model.entity.character.PlayCharacterClass;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

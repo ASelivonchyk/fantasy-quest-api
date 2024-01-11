@@ -1,4 +1,4 @@
-package dev.task.dndquest.model.entity;
+package dev.task.dndquest.model.entity.adventure;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,6 +12,7 @@ public class InteractionResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String action;
-   // private GameEntity result;
+    private String luck; //success or failure
+    private String action; // 
+   // private AdventEntity result;
 }

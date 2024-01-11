@@ -1,7 +1,5 @@
-package dev.task.dndquest.model.entity.advententity;
+package dev.task.dndquest.model.entity.adventure;
 
-import dev.task.dndquest.model.entity.Interaction;
-import dev.task.dndquest.model.entity.InteractionResult;
 import jakarta.persistence.*;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -11,7 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "creatures")
-public class Creature extends AdventEntity {
+public class Creature {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private String type;
     private String description;

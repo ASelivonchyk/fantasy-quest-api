@@ -1,6 +1,5 @@
-package dev.task.dndquest.model.entity;
+package dev.task.dndquest.model.entity.adventure;
 
-import dev.task.dndquest.model.entity.advententity.Story;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

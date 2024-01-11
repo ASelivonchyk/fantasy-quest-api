@@ -1,6 +1,6 @@
 package dev.task.dndquest.service.impl;
 
-import dev.task.dndquest.model.entity.PlayCharacterClass;
+import dev.task.dndquest.model.entity.character.PlayCharacterClass;
 import dev.task.dndquest.repository.PlayCharacterClassRepository;
 import dev.task.dndquest.service.PlayCharacterClassService;
 import dev.task.dndquest.exception.ClassNotFoundException;

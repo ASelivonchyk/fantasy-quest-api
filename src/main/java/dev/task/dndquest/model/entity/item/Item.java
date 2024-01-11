@@ -1,14 +1,16 @@
-package dev.task.dndquest.model.entity;
+package dev.task.dndquest.model.entity.item;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Data
+@Getter
+@AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "class")
-public class PlayCharacterClass {
+@Table(name = "items")
+public class Item extends AdventEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,6 +1,7 @@
-package dev.task.dndquest.model.entity;
+package dev.task.dndquest.model.entity.character;
 
-import dev.task.dndquest.model.entity.advententity.Item;
+import dev.task.dndquest.model.entity.adventure.Adventure;
+import dev.task.dndquest.model.entity.item.Item;
 import jakarta.persistence.*;
 import java.util.Map;
 import lombok.AllArgsConstructor;

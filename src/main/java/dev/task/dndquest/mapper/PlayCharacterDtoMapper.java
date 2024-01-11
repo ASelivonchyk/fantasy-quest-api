@@ -3,9 +3,9 @@ package dev.task.dndquest.mapper;
 import dev.task.dndquest.model.dto.response.InventoryResponseDto;
 import dev.task.dndquest.model.dto.request.PlayCharacterRequestDto;
 import dev.task.dndquest.model.dto.response.PlayCharacterResponseDto;
-import dev.task.dndquest.model.entity.PlayCharacter;
-import dev.task.dndquest.model.entity.PlayCharacterClass;
-import dev.task.dndquest.model.entity.Race;
+import dev.task.dndquest.model.entity.character.PlayCharacter;
+import dev.task.dndquest.model.entity.character.PlayCharacterClass;
+import dev.task.dndquest.model.entity.character.Race;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 

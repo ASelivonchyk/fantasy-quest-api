@@ -1,21 +1,21 @@
-package dev.task.dndquest.model.entity;
+package dev.task.dndquest.model.entity.adventure;
 
-import dev.task.dndquest.model.entity.advententity.Story;
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import java.util.List;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "storylines")
-public class StoryLine {
+@Table(name = "stories")
+public class Story {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
     private String description;
-    @OneToMany
-    private List<Story> stories;
+    private String placeType;
+    private int storylinePart;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Creature> creatures;
 }

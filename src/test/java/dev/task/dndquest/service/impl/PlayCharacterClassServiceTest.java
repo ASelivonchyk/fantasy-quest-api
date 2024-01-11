@@ -2,7 +2,7 @@ package dev.task.dndquest.service.impl;
 
 import java.util.Optional;
 import dev.task.dndquest.exception.ClassNotFoundException;
-import dev.task.dndquest.model.entity.PlayCharacterClass;
+import dev.task.dndquest.model.entity.character.PlayCharacterClass;
 import dev.task.dndquest.repository.PlayCharacterClassRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
