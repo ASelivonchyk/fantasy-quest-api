@@ -1,12 +1,11 @@
 package dev.task.dndquest.service.impl;
 
 import dev.task.dndquest.exception.CharNotFoundException;
-import dev.task.dndquest.mapper.DtoMapper;
+import dev.task.dndquest.mapper.PlayCharacterMapper;
 import dev.task.dndquest.model.ItemOperations;
 import dev.task.dndquest.model.dto.request.InventoryRequestDto;
 import dev.task.dndquest.model.dto.request.PlayCharacterRequestDto;
 import dev.task.dndquest.model.dto.response.InventoryResponseDto;
-import dev.task.dndquest.model.dto.response.PlayCharacterResponseDto;
 import dev.task.dndquest.model.entity.item.Item;
 import dev.task.dndquest.model.entity.character.PlayCharacter;
 import dev.task.dndquest.repository.PlayCharacterRepository;
@@ -26,8 +25,7 @@ public class PlayCharacterServiceImpl implements PlayCharacterService {
     private final PlayCharacterClassService classService;
     private final RaceService raceService;
     private final ItemService itemService;
-    private final DtoMapper<PlayCharacter,
-            PlayCharacterResponseDto, PlayCharacterRequestDto> mapper;
+    private final PlayCharacterMapper mapper;
 
     @Override
     public PlayCharacter save(PlayCharacterRequestDto dto) {

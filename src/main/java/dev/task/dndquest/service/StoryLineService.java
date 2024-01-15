@@ -1,7 +1,6 @@
 package dev.task.dndquest.service;
 
 import dev.task.dndquest.model.entity.adventure.StoryLine;
-
 import java.util.List;
 
 public interface StoryLineService {

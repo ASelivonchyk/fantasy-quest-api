@@ -16,7 +16,7 @@ public class AdventureController {
 
     @GetMapping("/all")
     public String getAvailableAdventures(){
-        String prompt = "generate one json in format \"title\",\"description\" with 3 different dnd quests";
+        String prompt = "generate 3 different dnd quests in format \"title\",\"description\". Return as json";
         List<StoryLine> storyLines = storyLineService.saveAll(prompt);
         return "done";
     }
