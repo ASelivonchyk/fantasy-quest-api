@@ -1,12 +1,14 @@
 package dev.task.dndquest.model.entity.adventure;
 
-import dev.task.dndquest.model.entity.adventure.Story;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.util.List;
 
 @Entity
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "storylines")
@@ -18,4 +20,9 @@ public class StoryLine {
     private String description;
     @OneToMany
     private List<Story> stories;
+
+    public StoryLine(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 }
