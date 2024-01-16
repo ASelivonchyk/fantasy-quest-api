@@ -1,4 +1,4 @@
-package dev.task.dndquest.model.dto.request;
+package dev.task.dndquest.model.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,9 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class StoryLineRequestDto {
-    private String serial;
-    private String title;
+public class StoryShortResponseDto {
+    private String part;
     private String description;
+    private String placeType;
+    private String story;
 }

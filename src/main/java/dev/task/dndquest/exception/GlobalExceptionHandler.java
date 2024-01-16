@@ -30,7 +30,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({CharNotFoundException.class, RaceNotFoundException.class,
-            ItemNotFoundException.class, ClassNotFoundException.class})
+            ItemNotFoundException.class, ClassNotFoundException.class, StoryLineNotFoundException.class})
     public ResponseEntity<Object> handleDBNotFoundExceptions(
             Exception ex, WebRequest request) {
         return ResponseEntity

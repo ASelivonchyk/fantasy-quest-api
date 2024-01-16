@@ -1,16 +1,16 @@
-package dev.task.dndquest.model.dto.request;
+package dev.task.dndquest.model.dto.response;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@Getter
-@ToString
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StoryLineRequestDto {
+public class StoryLineFullResponseDto {
     private String serial;
     private String title;
     private String description;
+    private List<StoryShortResponseDto> stories;
 }

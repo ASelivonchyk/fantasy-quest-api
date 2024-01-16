@@ -13,9 +13,10 @@ public class Story {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private int storylinePart;
     private String description;
     private String placeType;
-    private int storylinePart;
+    private String story;
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Creature> creatures;
 }
