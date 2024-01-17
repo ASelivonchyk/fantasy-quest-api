@@ -5,6 +5,7 @@ import dev.task.dndquest.model.dto.response.StoryLineShortResponseDto;
 import dev.task.dndquest.service.StoryLineService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,17 +18,17 @@ public class AdventureController {
     private final StoryLineService storyLineService;
 
     @GetMapping("/available")
-    public List<StoryLineShortResponseDto> getAvailableAdventures(){
-        return storyLineService.getAvailableStoryLines();
+    public List<StoryLineShortResponseDto> getAvailableAdventures(Authentication auth){
+        return storyLineService.getAvailableStoryLines(auth);
     }
 
     @GetMapping("/available/new")
-    public List<StoryLineShortResponseDto> addAvailableAdventures(){
-        return storyLineService.addNewStoryLinesForAvailable();
+    public List<StoryLineShortResponseDto> addAvailableAdventures(Authentication auth){
+        return storyLineService.addNewStoryLinesForAvailable(auth);
     }
 
     @GetMapping("/available/{serial}")
-    public StoryLineFullResponseDto selectAdventure(@PathVariable Integer serial){
-        return storyLineService.selectStoryline(serial);
+    public StoryLineFullResponseDto selectAdventure(@PathVariable Integer serial, Authentication auth){
+        return storyLineService.selectStoryline(serial, auth);
     }
 }
