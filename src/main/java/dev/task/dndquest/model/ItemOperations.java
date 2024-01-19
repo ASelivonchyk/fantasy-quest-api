@@ -2,7 +2,7 @@ package dev.task.dndquest.model;
 
 import dev.task.dndquest.strategy.item.AddItem;
 import dev.task.dndquest.strategy.item.ItemStrategy;
-import dev.task.dndquest.strategy.item.SubItem;
+import dev.task.dndquest.strategy.item.RemoveItem;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ItemOperations {
     ADD (new AddItem()),
-    SUB (new SubItem());
+    REMOVE (new RemoveItem());
 
     private final ItemStrategy itemStrategy;
 

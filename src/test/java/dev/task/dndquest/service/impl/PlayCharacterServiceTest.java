@@ -1,22 +1,20 @@
 package dev.task.dndquest.service.impl;
 
-import dev.task.dndquest.mapper.DtoMapper;
+import dev.task.dndquest.mapper.PlayCharacterMapper;
 import dev.task.dndquest.model.dto.request.PlayCharacterRequestDto;
-import dev.task.dndquest.model.dto.response.PlayCharacterResponseDto;
-import dev.task.dndquest.model.entity.PlayCharacter;
-import dev.task.dndquest.model.entity.PlayCharacterClass;
-import dev.task.dndquest.model.entity.Race;
+import dev.task.dndquest.model.entity.character.PlayCharacter;
+import dev.task.dndquest.model.entity.character.PlayCharacterClass;
+import dev.task.dndquest.model.entity.character.Race;
 import dev.task.dndquest.repository.PlayCharacterRepository;
 import dev.task.dndquest.service.PlayCharacterClassService;
 import dev.task.dndquest.service.RaceService;
+import java.util.HashMap;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -30,8 +28,7 @@ class PlayCharacterServiceTest {
     @Mock
     private RaceService raceService;
     @Mock
-    DtoMapper<PlayCharacter,
-            PlayCharacterResponseDto, PlayCharacterRequestDto> mapper;
+    PlayCharacterMapper mapper;
     @InjectMocks
     private PlayCharacterServiceImpl service;
     private static PlayCharacterRequestDto dto;
@@ -46,7 +43,8 @@ class PlayCharacterServiceTest {
         pcClass.setName("fighter");
         race = new Race();
         race.setName("orc");
-        playCharacter = new PlayCharacter(1L, "Tom", pcClass, race, 10, 10, 10, 10, 10, 10, new HashMap<>());
+        playCharacter = new PlayCharacter(
+                1L, "Tom", pcClass, race, 10, 10, 10, 10, 10, 10, new HashMap<>(), null);
     }
 
     @Test

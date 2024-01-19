@@ -1,6 +1,6 @@
 package dev.task.dndquest.service;
 
-import dev.task.dndquest.model.entity.Item;
+import dev.task.dndquest.model.entity.item.Item;
 
 public interface ItemService {
     Item findByName(String name);

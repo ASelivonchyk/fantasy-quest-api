@@ -1,7 +1,7 @@
 package dev.task.dndquest.service.impl;
 
 import dev.task.dndquest.exception.ItemNotFoundException;
-import dev.task.dndquest.model.entity.Item;
+import dev.task.dndquest.model.entity.item.Item;
 import dev.task.dndquest.repository.ItemRepository;
 import dev.task.dndquest.service.ItemService;
 import lombok.RequiredArgsConstructor;

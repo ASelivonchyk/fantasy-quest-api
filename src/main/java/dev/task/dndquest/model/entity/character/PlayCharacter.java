@@ -1,5 +1,7 @@
-package dev.task.dndquest.model.entity;
+package dev.task.dndquest.model.entity.character;
 
+import dev.task.dndquest.model.entity.adventure.Adventure;
+import dev.task.dndquest.model.entity.item.Item;
 import jakarta.persistence.*;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -34,4 +36,24 @@ public class PlayCharacter {
     @MapKeyJoinColumn(name = "items_id")
     @Column(name = "items_count")
     private Map<Item, Integer> items;
+    @ManyToOne
+    @JoinTable(
+            name="characters_games",
+            joinColumns=@JoinColumn(name="character_id"),
+            inverseJoinColumns=@JoinColumn(name="adventure_id"))
+    private Adventure adventure;
+
+    public PlayCharacter(String name, PlayCharacterClass playClass, Race race,
+                         int strength, int dexterity, int constitution,
+                         int intelligence, int wisdom, int charisma) {
+        this.name = name;
+        this.playClass = playClass;
+        this.race = race;
+        this.strength = strength;
+        this.dexterity = dexterity;
+        this.constitution = constitution;
+        this.intelligence = intelligence;
+        this.wisdom = wisdom;
+        this.charisma = charisma;
+    }
 }

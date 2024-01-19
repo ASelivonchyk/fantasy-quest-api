@@ -2,9 +2,8 @@ package dev.task.dndquest.service.impl;
 
 import dev.task.dndquest.exception.BadCredentialsException;
 import dev.task.dndquest.exception.DuplicateLoginException;
-import dev.task.dndquest.mapper.DtoMapper;
+import dev.task.dndquest.mapper.PlayerMapper;
 import dev.task.dndquest.model.dto.request.PlayerRequestDto;
-import dev.task.dndquest.model.dto.response.PlayerResponseDto;
 import dev.task.dndquest.model.entity.Player;
 import dev.task.dndquest.repository.PlayerRepository;
 import dev.task.dndquest.service.PlayerService;
@@ -17,8 +16,7 @@ import org.springframework.stereotype.Service;
 public class PlayerServiceImpl implements PlayerService {
     private final PasswordEncoder passwordEncoder;
     private final PlayerRepository repository;
-    private final DtoMapper<Player,
-            PlayerResponseDto, PlayerRequestDto> mapper;
+    private final PlayerMapper mapper;
 
     @Override
     public Player save(PlayerRequestDto dto) {

@@ -1,7 +1,11 @@
 package dev.task.dndquest.exception;
 
 import dev.task.dndquest.model.dto.response.ExceptionResponseDto;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
+import jakarta.validation.ConstraintViolationException;
 import lombok.NonNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,8 +33,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                        .collect(Collectors.toList()));
     }
 
+    @ExceptionHandler (ConstraintViolationException.class)
+    protected ResponseEntity<Object> handleConstraintViolationException(
+            ConstraintViolationException ex) {
+        List<ExceptionResponseDto> list = Arrays.stream(ex.getMessage().split(","))
+                .map(m -> String.format("in position %s %s",
+                        m.substring(m.indexOf('[') + 1, m.indexOf(']')),
+                        m.substring(m.indexOf(':') + 1)))
+                .map(ExceptionResponseDto::new)
+                .toList();
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(list);
+    }
+
     @ExceptionHandler({CharNotFoundException.class, RaceNotFoundException.class,
-            ItemNotFoundException.class, ClassNotFoundException.class})
+            ItemNotFoundException.class, ClassNotFoundException.class, StoryLineNotFoundException.class})
     public ResponseEntity<Object> handleDBNotFoundExceptions(
             Exception ex, WebRequest request) {
         return ResponseEntity

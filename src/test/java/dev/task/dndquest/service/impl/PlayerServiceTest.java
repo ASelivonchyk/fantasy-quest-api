@@ -2,9 +2,8 @@ package dev.task.dndquest.service.impl;
 
 import dev.task.dndquest.exception.BadCredentialsException;
 import dev.task.dndquest.exception.DuplicateLoginException;
-import dev.task.dndquest.mapper.DtoMapper;
+import dev.task.dndquest.mapper.PlayerMapper;
 import dev.task.dndquest.model.dto.request.PlayerRequestDto;
-import dev.task.dndquest.model.dto.response.PlayerResponseDto;
 import dev.task.dndquest.model.entity.Player;
 import dev.task.dndquest.repository.PlayerRepository;
 import java.util.Optional;
@@ -30,8 +29,7 @@ class PlayerServiceTest {
     @Mock
     private PlayerRepository repository;
     @Mock
-    private DtoMapper<Player,
-            PlayerResponseDto, PlayerRequestDto> mapper;
+    private PlayerMapper mapper;
     @InjectMocks
     private PlayerServiceImpl service;
     private static PlayerRequestDto dto;
