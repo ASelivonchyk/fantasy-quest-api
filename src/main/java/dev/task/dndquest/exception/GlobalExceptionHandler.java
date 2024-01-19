@@ -24,8 +24,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .status(HttpStatus.PRECONDITION_FAILED)
                 .body(ex.getAllErrors().stream()
                                        .map(e -> new ExceptionResponseDto(
-                                               e.getDefaultMessage(),
-                                               HttpStatus.PRECONDITION_FAILED))
+                                               e.getDefaultMessage()))
                                        .distinct()
                                        .collect(Collectors.toList()));
     }
@@ -37,7 +36,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body(new ExceptionResponseDto(
-                        ex.getMessage(), HttpStatus.SERVICE_UNAVAILABLE));
+                        ex.getMessage()));
     }
 
     @ExceptionHandler({BadCredentialsException.class, JwtAuthenticationException.class,
@@ -47,6 +46,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionResponseDto(
-                        ex.getMessage(), HttpStatus.BAD_REQUEST));
+                        ex.getMessage()));
     }
 }
