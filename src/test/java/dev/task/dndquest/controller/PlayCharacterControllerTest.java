@@ -110,14 +110,15 @@ class PlayCharacterControllerTest {
     void whenCharacterExistInDBAndInventoryDtoValid_thenAddItemReturnCharactersInventoryWithChanges_ok(){
         Map<String, Integer> variable = new HashMap<>();
         variable.put("id", 1);
-        InventoryRequestDto addedRequestDto = new InventoryRequestDto("shield", 2, "add");
+        List<InventoryRequestDto> addRequestDto = List.of(new InventoryRequestDto("shield", 2, "add"),
+               new InventoryRequestDto("shield", 1, "add"));
         ResponseEntity<List<InventoryResponseDto>> response =
                 restTemplate.exchange("/api/character/{id}/inventory", HttpMethod.PUT,
-                new HttpEntity<>(addedRequestDto), new ParameterizedTypeReference<>() {}, variable);
+                        new HttpEntity<>(addRequestDto) , new ParameterizedTypeReference<>() {}, variable);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().size()).isEqualTo(2);
-        assertThat(response.getBody()).contains(new InventoryResponseDto("shield", 3));
+        assertThat(response.getBody()).contains(new InventoryResponseDto("shield", 4));
     }
 
     @Test
@@ -126,10 +127,10 @@ class PlayCharacterControllerTest {
     void whenCharacterExistInDBAndInventoryDtoValid_thenSubtractItemReturnCharactersInventoryWithChanges_ok(){
         Map<String, Integer> variable = new HashMap<>();
         variable.put("id", 1);
-        InventoryRequestDto subtractRequestDto = new InventoryRequestDto("sword", 1, "sub");
+        List<InventoryRequestDto> removeRequestDto = List.of(new InventoryRequestDto("sword", 1, "remove"));
         ResponseEntity<List<InventoryResponseDto>> response =
                 restTemplate.exchange("/api/character/{id}/inventory", HttpMethod.PUT,
-                        new HttpEntity<>(subtractRequestDto), new ParameterizedTypeReference<>() {}, variable);
+                        new HttpEntity<>(removeRequestDto), new ParameterizedTypeReference<>() {}, variable);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody()).contains(new InventoryResponseDto("sword", 0));
@@ -139,10 +140,10 @@ class PlayCharacterControllerTest {
     void whenCharacterNotExistInDB_thenManageItemMethodReturnStatusPreconditionFailed_notOk(){
         Map<String, Integer> variable = new HashMap<>();
         variable.put("id", 10);
-        InventoryRequestDto addedRequestDto = new InventoryRequestDto("shield", 2, "add");
+        List<InventoryRequestDto> addRequestDto = List.of(new InventoryRequestDto("shield", 2, "add"));
         ResponseEntity<CharNotFoundException> response =
                 restTemplate.exchange("/api/character/{id}/inventory", HttpMethod.PUT,
-                        new HttpEntity<>(addedRequestDto), CharNotFoundException.class, variable);
+                        new HttpEntity<>(addRequestDto), CharNotFoundException.class, variable);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getMessage()).isEqualTo("no such character in database");
@@ -152,39 +153,39 @@ class PlayCharacterControllerTest {
     void whenSubtractResultLowerThanZero_thenSubtractItemReturnStatusBadRequest_notOk(){
         Map<String, Integer> variable = new HashMap<>();
         variable.put("id", 1);
-        InventoryRequestDto subtractRequestDto = new InventoryRequestDto("sword", 5, "sub");
+        List<InventoryRequestDto> removeRequestDto = List.of(new InventoryRequestDto("sword", 5, "remove"));
         ResponseEntity<IllegalArgumentException> response =
                 restTemplate.exchange("/api/character/{id}/inventory", HttpMethod.PUT,
-                        new HttpEntity<>(subtractRequestDto), IllegalArgumentException.class, variable);
+                        new HttpEntity<>(removeRequestDto), IllegalArgumentException.class, variable);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getMessage()).isEqualTo("not enough items");
+        assertThat(response.getBody().getMessage()).contains("not enough items");
     }
 
     @Test
     void whenItemNotExistInDB_thenManageItemMethodReturnStatusBadRequest_notOk(){
         Map<String, Integer> variable = new HashMap<>();
         variable.put("id", 1);
-        InventoryRequestDto requestDto = new InventoryRequestDto("wrongItem", 1, "add");
+        List<InventoryRequestDto> requestDto = List.of(new InventoryRequestDto("wrongItem", 1, "add"));
         ResponseEntity<List<ExceptionResponseDto>> response =
                 restTemplate.exchange("/api/character/{id}/inventory", HttpMethod.PUT,
                         new HttpEntity<>(requestDto), new ParameterizedTypeReference<>() {}, variable);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.PRECONDITION_FAILED);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().get(0).getMessage()).isEqualTo("enter valid item name");
+        assertThat(response.getBody().get(0).getMessage()).contains("enter valid item name");
     }
 
     @Test
     void whenItemOperationNotValid_thenManageItemReturnStatusPreconditionFailed_notOk(){
         Map<String, Integer> variable = new HashMap<>();
         variable.put("id", 1);
-        InventoryRequestDto addedRequestDto = new InventoryRequestDto("shield", 2, "wrongOperation");
+        List<InventoryRequestDto> addRequestDto = List.of(new InventoryRequestDto("shield", 2, "wrongOperation"));
         ResponseEntity<List<ExceptionResponseDto>> response =
                 restTemplate.exchange("/api/character/{id}/inventory", HttpMethod.PUT,
-                        new HttpEntity<>(addedRequestDto), new ParameterizedTypeReference<>() {}, variable);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.PRECONDITION_FAILED);
+                        new HttpEntity<>(addRequestDto), new ParameterizedTypeReference<>() {}, variable);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().get(0).getMessage()).isEqualTo("enter valid item operation");
+        assertThat(response.getBody().get(0).getMessage()).contains("enter valid item operation");
     }
 
     @Test
