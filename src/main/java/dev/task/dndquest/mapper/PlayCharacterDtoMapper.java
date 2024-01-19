@@ -1,11 +1,12 @@
 package dev.task.dndquest.mapper;
 
-import dev.task.dndquest.model.dto.ItemResponseDto;
-import dev.task.dndquest.model.dto.PlayCharacterRequestDto;
-import dev.task.dndquest.model.dto.PlayCharacterResponseDto;
+import dev.task.dndquest.model.dto.response.InventoryResponseDto;
+import dev.task.dndquest.model.dto.request.PlayCharacterRequestDto;
+import dev.task.dndquest.model.dto.response.PlayCharacterResponseDto;
 import dev.task.dndquest.model.entity.PlayCharacter;
 import dev.task.dndquest.model.entity.PlayCharacterClass;
 import dev.task.dndquest.model.entity.Race;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,7 @@ public class PlayCharacterDtoMapper
                 entity.getWisdom(),
                 entity.getCharisma(),
                 entity.getItems().entrySet().stream()
-                        .map(e -> new ItemResponseDto(e.getKey().getName(), e.getValue()))
+                        .map(e -> new InventoryResponseDto(e.getKey().getName(), e.getValue()))
                         .collect(Collectors.toList()));
     }
 
@@ -36,6 +37,7 @@ public class PlayCharacterDtoMapper
         Race race = new Race();
         race.setName(dto.getPlayCharRace());
         return new PlayCharacter(
+                null,
                 dto.getName(),
                 playCharacterClass,
                 race,
@@ -44,6 +46,7 @@ public class PlayCharacterDtoMapper
                 dto.getConstitution(),
                 dto.getIntelligence(),
                 dto.getWisdom(),
-                dto.getCharisma());
+                dto.getCharisma(),
+                new HashMap<>());
     }
 }

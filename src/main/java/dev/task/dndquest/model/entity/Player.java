@@ -10,17 +10,14 @@ import java.util.List;
 
 @Entity
 @Data
-@RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
 public class Player implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NonNull
     @Column(unique = true, nullable = false)
     private  String login;
-    @NonNull
     @Column(nullable = false)
     private String password;
     //private List<PlayCharacter> characters;

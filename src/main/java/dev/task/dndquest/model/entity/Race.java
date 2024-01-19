@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
 @Table(name = "race")
 public class Race {
     @Id

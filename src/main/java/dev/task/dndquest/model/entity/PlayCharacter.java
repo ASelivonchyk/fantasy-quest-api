@@ -1,12 +1,10 @@
 package dev.task.dndquest.model.entity;
 
 import jakarta.persistence.*;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Entity
 @Data
@@ -36,19 +34,4 @@ public class PlayCharacter {
     @MapKeyJoinColumn(name = "items_id")
     @Column(name = "items_count")
     private Map<Item, Integer> items;
-
-    public PlayCharacter(String name, PlayCharacterClass clas, Race race,
-                         int strength, int dexterity, int constitution, int intelligence,
-                         int wisdom, int charisma) {
-        this.name = name;
-        this.playClass = clas;
-        this.race = race;
-        this.strength = strength;
-        this.dexterity = dexterity;
-        this.constitution = constitution;
-        this.intelligence = intelligence;
-        this.wisdom = wisdom;
-        this.charisma = charisma;
-        this.items = new HashMap<>();
-    }
 }
