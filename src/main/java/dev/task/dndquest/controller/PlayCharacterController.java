@@ -9,11 +9,13 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/character")
 @RequiredArgsConstructor
+@Validated
 public class PlayCharacterController {
     private final PlayCharacterService playCharacterService;
 
@@ -26,8 +28,8 @@ public class PlayCharacterController {
 
     @PutMapping("/{id}/inventory")
     public ResponseEntity<List<InventoryResponseDto>> manageItem(@PathVariable Long id,
-                                                                 @Valid @RequestBody InventoryRequestDto dto) {
-        return ResponseEntity.ok(playCharacterService.manageItem(id, dto));
+                                                                   @RequestBody List<@Valid InventoryRequestDto> items) {
+        return ResponseEntity.ok(playCharacterService.manageItem(id, items));
     }
 
     @GetMapping("/{id}/inventory")

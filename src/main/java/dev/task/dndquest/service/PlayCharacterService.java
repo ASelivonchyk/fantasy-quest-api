@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface PlayCharacterService {
     PlayCharacter save(PlayCharacterRequestDto dto);
-    List<InventoryResponseDto> manageItem(Long characterId, InventoryRequestDto dto);
+    List<InventoryResponseDto> manageItem(Long characterId, List<InventoryRequestDto> items);
     List<InventoryResponseDto> getAllItems(Long characterId);
 }

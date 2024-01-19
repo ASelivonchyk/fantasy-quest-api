@@ -36,10 +36,10 @@ public class PlayCharacterServiceImpl implements PlayCharacterService {
     }
 
     @Override
-    public List<InventoryResponseDto> manageItem(Long characterId, InventoryRequestDto dto) {
+    public List<InventoryResponseDto> manageItem(Long characterId, List<InventoryRequestDto> items) {
         PlayCharacter character = repository.findById(characterId)
                                             .orElseThrow(CharNotFoundException::new);
-        applyOperationWithItems(character, dto);
+        applyOperationWithItems(character, items);
         return mapper.matToDto(repository.save(character)).getItems();
     }
 
@@ -49,13 +49,14 @@ public class PlayCharacterServiceImpl implements PlayCharacterService {
         return mapper.matToDto(character).getItems();
     }
 
-    private void applyOperationWithItems(PlayCharacter character, InventoryRequestDto dto){
-        Item item = itemService.findByName(dto.getItem());
-        Map<Item, Integer> itemsInInventory = character.getItems();
-        Integer itemsCount = itemsInInventory.get(item) == null ? 0 : itemsInInventory.get(item);
-        Integer totalItemsCount = ItemOperations.getMap()
-                .get(dto.getOperation())
-                .applyOperation(itemsCount, dto.getCount());
-        itemsInInventory.put(item, totalItemsCount);
+    private void applyOperationWithItems(PlayCharacter character, List<InventoryRequestDto> items) {
+        items.forEach(inventoryDto -> {
+            Item item = itemService.findByName(inventoryDto.getItem());
+            Map<Item, Integer> itemsInInventory = character.getItems();
+            Integer totalItemsCount = ItemOperations.getMap()
+                    .get(inventoryDto.getOperation())
+                    .applyOperation(itemsInInventory.getOrDefault(item, 0), inventoryDto.getCount());
+            itemsInInventory.put(item, totalItemsCount);
+        });
     }
 }

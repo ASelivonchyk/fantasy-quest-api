@@ -20,7 +20,7 @@ public class AiChatResponseParserImpl implements AiChatResponseParser{
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
             return mapper.readValue(
-                    checkAIRequestAndFormat(chatResponse),
+                    retrieveAiResponse(chatResponse),
                     new TypeReference<>(){});
         } catch (JsonProcessingException e) {
             throw new RuntimeException("error while parsing json");
@@ -32,14 +32,14 @@ public class AiChatResponseParserImpl implements AiChatResponseParser{
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
             return mapper.readValue(
-                    checkAIRequestAndFormat(chatResponse),
+                    retrieveAiResponse(chatResponse),
                     new TypeReference<>(){});
         } catch (JsonProcessingException e) {
             throw new RuntimeException("error while parsing json");
         }
     }
 
-    private String checkAIRequestAndFormat(String aiRequest){
+    private String retrieveAiResponse(String aiRequest){
         if (aiRequest.indexOf("[") != 0) {
             return aiRequest.substring(
                     aiRequest.indexOf("["),

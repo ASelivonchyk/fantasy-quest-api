@@ -1,6 +1,6 @@
 package dev.task.dndquest.strategy.item;
 
-public class SubItem implements ItemStrategy{
+public class RemoveItem implements ItemStrategy{
     @Override
     public Integer applyOperation(Integer itemsInInventoryCount, Integer itemsCount) {
         Integer resultCount = itemsInInventoryCount - itemsCount;

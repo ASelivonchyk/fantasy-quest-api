@@ -16,7 +16,7 @@ public class EnumOperationValidator implements ConstraintValidator<EnumOperation
     }
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext cntext) {
+    public boolean isValid(String value, ConstraintValidatorContext context) {
         return enumValues.contains(value);
     }
 }
