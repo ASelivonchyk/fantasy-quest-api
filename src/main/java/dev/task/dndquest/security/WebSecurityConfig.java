@@ -33,7 +33,7 @@ public class WebSecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager() throws Exception {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        var authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(authProvider);

@@ -1,9 +1,9 @@
 package dev.task.dndquest.service.impl;
 
+import dev.task.dndquest.exception.ClassNotFoundException;
 import dev.task.dndquest.model.entity.character.PlayCharacterClass;
 import dev.task.dndquest.repository.PlayCharacterClassRepository;
 import dev.task.dndquest.service.PlayCharacterClassService;
-import dev.task.dndquest.exception.ClassNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +19,6 @@ public class PlayCharacterClassServiceImpl implements PlayCharacterClassService 
 
     @Override
     public Boolean existsByName(String name) {
-       return repository.existsByName(name);
+        return repository.existsByName(name);
     }
 }

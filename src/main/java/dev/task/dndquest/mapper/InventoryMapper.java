@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 
 @Mapper
 abstract class InventoryMapper {
-    public List<InventoryResponseDto> map (Map<Item, Integer> items) {
+    public List<InventoryResponseDto> map(Map<Item, Integer> items) {
         return items.entrySet().stream()
                 .map(e -> new InventoryResponseDto(e.getKey().getName(), e.getValue()))
                 .collect(Collectors.toList());

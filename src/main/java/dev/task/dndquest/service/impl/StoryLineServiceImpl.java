@@ -20,8 +20,8 @@ import org.springframework.stereotype.Service;
 public class StoryLineServiceImpl implements StoryLineService {
     private static final String FIRST_SERIAL_NUM = "1";
     private static final String PROMPT_STORYLINES =
-            "create dnd quest in format: \"serial\", \"title\",\"description\". " +
-                    "Return as json. Count of quests - 3. Serial count from:";
+            "create dnd quest in format: \"serial\", \"title\",\"description\". "
+                    + "Return as json. Count of quests - 3. Serial count from:";
     private static final String PROMPT_STORY_START =
             "generate 4 parts of dnd quest with ";
     private static final String PROMPT_STORY_END =
@@ -33,7 +33,7 @@ public class StoryLineServiceImpl implements StoryLineService {
 
     @Override
     @Cacheable(value = "ps", key = "#auth")
-    public List<StoryLineShortResponseDto> getAvailableStoryLines(Authentication auth){
+    public List<StoryLineShortResponseDto> getAvailableStoryLines(Authentication auth) {
         availableStoryLines = initAvailableStoryLines(FIRST_SERIAL_NUM);
         return availableStoryLines;
     }
@@ -52,7 +52,7 @@ public class StoryLineServiceImpl implements StoryLineService {
         StoryLineShortResponseDto storyLine;
         try {
             storyLine = availableStoryLines.get(serialNumber - 1);
-        } catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             throw new StoryLineNotFoundException();
         }
         StoryLineFullResponseDto fullStoryLineDto = storyLineMapper.mapShortToFullDto(storyLine);
@@ -61,15 +61,15 @@ public class StoryLineServiceImpl implements StoryLineService {
     }
 
     private List<StoryLineShortResponseDto> initAvailableStoryLines(String storyLineSerialNumber) {
-        return parser.parseMultipleStoryLinesFromJSON(
+        return parser.parseMultipleStoryLinesFromJson(
                         aiClient.generate(PROMPT_STORYLINES + storyLineSerialNumber));
     }
 
     private List<StoryShortResponseDto> initStories(String storyPrompt) {
-        return parser.parseMultipleStoriesFromJSON(aiClient.generate(storyPrompt));
+        return parser.parseMultipleStoriesFromJson(aiClient.generate(storyPrompt));
     }
 
-    private String createFullStoryPrompt(StoryLineShortResponseDto storyLine){
+    private String createFullStoryPrompt(StoryLineShortResponseDto storyLine) {
         String promptMiddle = String.format("tile: %s and description: %s.",
                 storyLine.getTitle(), storyLine.getDescription());
         return String.format("%s %s %s",PROMPT_STORY_START, promptMiddle, PROMPT_STORY_END);

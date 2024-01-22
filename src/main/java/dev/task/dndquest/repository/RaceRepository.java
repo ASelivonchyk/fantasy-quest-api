@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RaceRepository extends JpaRepository<Race, Long> {
     Optional<Race> findByName(String name);
+
     Boolean existsByName(String name);
 }

@@ -1,11 +1,10 @@
 package dev.task.dndquest.exception;
 
 import dev.task.dndquest.model.dto.response.ExceptionResponseDto;
-
+import jakarta.validation.ConstraintViolationException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import jakarta.validation.ConstraintViolationException;
 import lombok.NonNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -48,8 +47,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({CharNotFoundException.class, RaceNotFoundException.class,
-            ItemNotFoundException.class, ClassNotFoundException.class, StoryLineNotFoundException.class})
-    public ResponseEntity<Object> handleDBNotFoundExceptions(
+            ItemNotFoundException.class, ClassNotFoundException.class,
+            StoryLineNotFoundException.class})
+    public ResponseEntity<Object> handleDbNotFoundExceptions(
             Exception ex, WebRequest request) {
         return ResponseEntity
                 .status(HttpStatus.SERVICE_UNAVAILABLE)

@@ -15,6 +15,7 @@ public class CharacterClassConstraintValidator
     public void initialize(CharacterClassConstraint constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
     }
+
     @Override
     public boolean isValid(String value,
                            ConstraintValidatorContext context) {

@@ -6,5 +6,5 @@ import org.mapstruct.Mapper;
 
 @Mapper
 public interface StoryLineMapper {
-    StoryLineFullResponseDto mapShortToFullDto (StoryLineShortResponseDto dto);
+    StoryLineFullResponseDto mapShortToFullDto(StoryLineShortResponseDto dto);
 }

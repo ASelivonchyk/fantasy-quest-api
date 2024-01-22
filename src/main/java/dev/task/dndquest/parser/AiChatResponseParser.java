@@ -5,6 +5,7 @@ import dev.task.dndquest.model.dto.response.StoryShortResponseDto;
 import java.util.List;
 
 public interface AiChatResponseParser {
-    List<StoryLineShortResponseDto> parseMultipleStoryLinesFromJSON(String chatResponse);
-    List<StoryShortResponseDto> parseMultipleStoriesFromJSON(String chatResponse);
+    List<StoryLineShortResponseDto> parseMultipleStoryLinesFromJson(String chatResponse);
+
+    List<StoryShortResponseDto> parseMultipleStoriesFromJson(String chatResponse);
 }

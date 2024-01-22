@@ -12,13 +12,13 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ItemOperations {
-    ADD (new AddItem()),
-    REMOVE (new RemoveItem());
+    ADD(new AddItem()),
+    REMOVE(new RemoveItem());
 
     private final ItemStrategy itemStrategy;
 
-    public static Map<String, ItemStrategy> getMap(){
-       return Arrays.stream(ItemOperations.values())
+    public static Map<String, ItemStrategy> getMap() {
+        return Arrays.stream(ItemOperations.values())
                 .collect(Collectors.toMap(
                         e -> e.name().toLowerCase(), ItemOperations::getItemStrategy));
     }

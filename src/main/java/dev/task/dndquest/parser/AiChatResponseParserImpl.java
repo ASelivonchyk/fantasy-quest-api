@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AiChatResponseParserImpl implements AiChatResponseParser{
+public class AiChatResponseParserImpl implements AiChatResponseParser {
     private final ObjectMapper mapper;
 
     @Override
-    public List<StoryLineShortResponseDto> parseMultipleStoryLinesFromJSON(String chatResponse) {
+    public List<StoryLineShortResponseDto> parseMultipleStoryLinesFromJson(String chatResponse) {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
             return mapper.readValue(
@@ -28,7 +28,7 @@ public class AiChatResponseParserImpl implements AiChatResponseParser{
     }
 
     @Override
-    public List<StoryShortResponseDto> parseMultipleStoriesFromJSON(String chatResponse) {
+    public List<StoryShortResponseDto> parseMultipleStoriesFromJson(String chatResponse) {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
             return mapper.readValue(
@@ -39,7 +39,7 @@ public class AiChatResponseParserImpl implements AiChatResponseParser{
         }
     }
 
-    private String retrieveAiResponse(String aiRequest){
+    private String retrieveAiResponse(String aiRequest) {
         if (aiRequest.indexOf("[") != 0) {
             return aiRequest.substring(
                     aiRequest.indexOf("["),
