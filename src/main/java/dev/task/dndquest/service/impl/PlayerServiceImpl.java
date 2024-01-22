@@ -8,6 +8,7 @@ import dev.task.dndquest.model.entity.Player;
 import dev.task.dndquest.repository.PlayerRepository;
 import dev.task.dndquest.service.PlayerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    @Cacheable(value = "player", key = "#login")
     public Player findByLogin(String login) {
         return repository.findByLogin(login).orElseThrow(BadCredentialsException::new);
     }

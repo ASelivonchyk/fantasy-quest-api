@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +31,12 @@ public class AdventureController {
     @GetMapping("/available/{serial}")
     public StoryLineFullResponseDto selectAdventure(
             @PathVariable Integer serial, Authentication auth) {
-        return storyLineService.selectStoryline(serial, auth);
+        return storyLineService.selectStoryLine(serial, auth);
+    }
+
+    @PostMapping("/available/{serial}")
+    public String startAdventure(
+            @PathVariable Integer serial, Authentication auth) {
+        return storyLineService.startStoryLine(serial, auth);
     }
 }

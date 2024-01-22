@@ -10,5 +10,7 @@ public interface StoryLineService {
 
     List<StoryLineShortResponseDto> addNewStoryLinesForAvailable(Authentication authentication);
 
-    StoryLineFullResponseDto selectStoryline(Integer serialNumber, Authentication authentication);
+    StoryLineFullResponseDto selectStoryLine(Integer serialNumber, Authentication authentication);
+
+    String startStoryLine(Integer serialNumber, Authentication authentication);
 }

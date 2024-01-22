@@ -5,6 +5,7 @@
 ![OpenAI](https://img.shields.io/badge/openai-GPT_3.5-%2306c498?style=for-the-badge&logo=openai&label=OpenAI)
 ![Docker](https://img.shields.io/badge/Docker-23-blue?style=for-the-badge&logo=docker&logoColor=blue)
 ![PostgresSQL](https://img.shields.io/badge/PostgreSQL-16-blue?style=for-the-badge&logo=PostgreSQL&logoColor=blue)
+![Redis](https://img.shields.io/badge/redis-7.2-red?style=for-the-badge&logo=redis&color=%23a83232)
 ## <a name="what-is-this-api">About this API</a>
 Fantasy DnD Quest API provides a way to play DnD game in single or multiplayer mode over HTTP requests.
 There are 4 predefined playing race and characters, but player can create his own game character.
@@ -50,6 +51,7 @@ for exploiting the weaknesses of their enemies.
 - Java version 21+
 - PostgreSQL version 16
 - Docker
+- Redis server
 
 **Configure application properties in `application.properties` file:**
 
