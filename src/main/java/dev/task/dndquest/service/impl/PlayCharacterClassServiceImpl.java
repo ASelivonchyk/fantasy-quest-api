@@ -1,6 +1,6 @@
 package dev.task.dndquest.service.impl;
 
-import dev.task.dndquest.exception.ClassNotFoundException;
+import dev.task.dndquest.exception.CharacterClassNotFoundException;
 import dev.task.dndquest.model.entity.character.PlayCharacterClass;
 import dev.task.dndquest.repository.PlayCharacterClassRepository;
 import dev.task.dndquest.service.PlayCharacterClassService;
@@ -14,7 +14,7 @@ public class PlayCharacterClassServiceImpl implements PlayCharacterClassService 
 
     @Override
     public PlayCharacterClass findByName(String name) {
-        return repository.findByName(name).orElseThrow(ClassNotFoundException::new);
+        return repository.findByName(name).orElseThrow(CharacterClassNotFoundException::new);
     }
 
     @Override

@@ -1,9 +1,9 @@
 package dev.task.dndquest.exception;
 
-public class ClassNotFoundException extends RuntimeException {
+public class CharacterClassNotFoundException extends RuntimeException {
     private static final String EX_MESSAGE = "no such class in database";
 
-    public ClassNotFoundException() {
+    public CharacterClassNotFoundException() {
         super(EX_MESSAGE);
     }
 }

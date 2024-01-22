@@ -11,11 +11,6 @@ public class RaceConstraintValidator implements ConstraintValidator<RaceConstrai
     private final RaceService raceService;
 
     @Override
-    public void initialize(RaceConstraint constraintAnnotation) {
-        ConstraintValidator.super.initialize(constraintAnnotation);
-    }
-
-    @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         return raceService.existsByName(value);
     }

@@ -1,7 +1,7 @@
 package dev.task.dndquest.service.impl;
 
 import java.util.Optional;
-import dev.task.dndquest.exception.ClassNotFoundException;
+import dev.task.dndquest.exception.CharacterClassNotFoundException;
 import dev.task.dndquest.model.entity.character.PlayCharacterClass;
 import dev.task.dndquest.repository.PlayCharacterClassRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,30 +18,29 @@ import static org.mockito.Mockito.when;
 class PlayCharacterClassServiceTest {
     private static final String TEST_CLASS_NAME = "fighter";
     private static final String TEST_WRONG_CLASS_NAME = "notExist";
-
     @Mock
     private PlayCharacterClassRepository repository;
     @InjectMocks
     private  PlayCharacterClassServiceImpl playCharacterClassService;
-    private static PlayCharacterClass existedClassInDB;
+    private static PlayCharacterClass existingClassInDB;
 
     @BeforeAll
     static void init(){
-        existedClassInDB = new PlayCharacterClass();
-        existedClassInDB.setName(TEST_CLASS_NAME);
-        existedClassInDB.setId(1L);
+        existingClassInDB = new PlayCharacterClass();
+        existingClassInDB.setName(TEST_CLASS_NAME);
+        existingClassInDB.setId(1L);
     }
     @Test
     void whenClassExistInDB_thenReturnClass_ok() {
-        when(repository.findByName(TEST_CLASS_NAME)).thenReturn(Optional.of(existedClassInDB));
-        assertThat(playCharacterClassService.findByName(TEST_CLASS_NAME)).isEqualTo(existedClassInDB);
+        when(repository.findByName(TEST_CLASS_NAME)).thenReturn(Optional.of(existingClassInDB));
+        assertThat(playCharacterClassService.findByName(TEST_CLASS_NAME)).isEqualTo(existingClassInDB);
     }
 
     @Test
     void whenClassNotExistInDB_thenThrowException_notOk() {
         when(repository.findByName(TEST_WRONG_CLASS_NAME)).thenReturn(Optional.empty());
         assertThatThrownBy(() -> playCharacterClassService.findByName(TEST_WRONG_CLASS_NAME))
-                .isInstanceOf(ClassNotFoundException.class);
+                .isInstanceOf(CharacterClassNotFoundException.class);
     }
 
     @Test

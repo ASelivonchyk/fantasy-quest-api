@@ -10,11 +10,6 @@ public class PlayCharacterStatConstraintValidator
     private static final int MAX_PLAY_CHAR_VALUE = 20;
 
     @Override
-    public void initialize(PlayCharacterStatConstraint constraintAnnotation) {
-        ConstraintValidator.super.initialize(constraintAnnotation);
-    }
-
-    @Override
     public boolean isValid(Integer value, ConstraintValidatorContext context) {
         return value >= MIN_PLAY_CHAR_VALUE && value <= MAX_PLAY_CHAR_VALUE;
     }

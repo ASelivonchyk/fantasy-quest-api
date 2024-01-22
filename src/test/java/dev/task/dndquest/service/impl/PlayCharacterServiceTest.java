@@ -37,7 +37,7 @@ class PlayCharacterServiceTest {
     private static PlayCharacter playCharacter;
 
     @BeforeAll
-    static void init(){
+    static void init() {
         dto = new PlayCharacterRequestDto("Tom", "fighter", "orc", 10, 10, 10, 10, 10, 10);
         pcClass = new PlayCharacterClass();
         pcClass.setName("fighter");
