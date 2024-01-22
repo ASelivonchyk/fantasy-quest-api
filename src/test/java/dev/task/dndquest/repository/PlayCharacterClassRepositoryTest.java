@@ -17,18 +17,18 @@ class PlayCharacterClassRepositoryTest {
     private static final String TEST_WRONG_CLASS_NAME = "notExist";
     @Autowired
     private PlayCharacterClassRepository repository;
-    private static PlayCharacterClass existedClassInDB;
+    private static PlayCharacterClass existingClassInDB;
 
     @BeforeAll
     static void init(){
-        existedClassInDB = new PlayCharacterClass();
-        existedClassInDB.setName(TEST_CLASS_NAME);
-        existedClassInDB.setId(1L);
+        existingClassInDB = new PlayCharacterClass();
+        existingClassInDB.setName(TEST_CLASS_NAME);
+        existingClassInDB.setId(1L);
     }
 
     @Test
     void whenClassExistInDB_thenFindByNameReturnOptionalWithClass_ok() {
-        assertThat(repository.findByName(TEST_CLASS_NAME)).contains(existedClassInDB);
+        assertThat(repository.findByName(TEST_CLASS_NAME)).contains(existingClassInDB);
     }
 
     @Test

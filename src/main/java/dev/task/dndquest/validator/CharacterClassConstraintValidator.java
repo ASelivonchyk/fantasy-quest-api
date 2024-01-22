@@ -12,10 +12,6 @@ public class CharacterClassConstraintValidator
     private final PlayCharacterClassService playCharacterClassService;
 
     @Override
-    public void initialize(CharacterClassConstraint constraintAnnotation) {
-        ConstraintValidator.super.initialize(constraintAnnotation);
-    }
-    @Override
     public boolean isValid(String value,
                            ConstraintValidatorContext context) {
         return playCharacterClassService.existsByName(value);

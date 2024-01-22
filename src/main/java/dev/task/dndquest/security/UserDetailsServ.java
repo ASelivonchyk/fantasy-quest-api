@@ -16,9 +16,9 @@ public class UserDetailsServ implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String login) throws BadCredentialsException {
-      Player player = playerService.findByLogin(login);
-      return User.withUsername(login)
-                 .password(player.getPassword())
-                 .build();
+        Player player = playerService.findByLogin(login);
+        return User.withUsername(login)
+                .password(player.getPassword())
+                .build();
     }
 }

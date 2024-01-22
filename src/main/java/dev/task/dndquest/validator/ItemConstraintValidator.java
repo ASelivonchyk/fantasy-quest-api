@@ -11,11 +11,6 @@ public class ItemConstraintValidator implements ConstraintValidator<ItemConstrai
     private final ItemService service;
 
     @Override
-    public void initialize(ItemConstraint constraintAnnotation) {
-        ConstraintValidator.super.initialize(constraintAnnotation);
-    }
-
-    @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
         return service.existsByName(value);
     }

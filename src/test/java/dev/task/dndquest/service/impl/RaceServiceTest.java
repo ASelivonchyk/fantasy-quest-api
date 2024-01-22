@@ -23,19 +23,19 @@ class RaceServiceTest {
     private RaceRepository repository;
     @InjectMocks
     private RaceServiceImpl raceService;
-    private static Race existedRaceInDB;
+    private static Race existingRaceInDB;
 
     @BeforeAll
     static void init(){
-        existedRaceInDB = new Race();
-        existedRaceInDB.setName(TEST_RACE_NAME);
-        existedRaceInDB.setId(1L);
+        existingRaceInDB = new Race();
+        existingRaceInDB.setName(TEST_RACE_NAME);
+        existingRaceInDB.setId(1L);
     }
 
     @Test
     void whenRaceExistInDB_thenReturnRace_ok() {
-        when(repository.findByName(TEST_RACE_NAME)).thenReturn(Optional.of(existedRaceInDB));
-        assertThat(raceService.findByName(TEST_RACE_NAME)).isEqualTo(existedRaceInDB);
+        when(repository.findByName(TEST_RACE_NAME)).thenReturn(Optional.of(existingRaceInDB));
+        assertThat(raceService.findByName(TEST_RACE_NAME)).isEqualTo(existingRaceInDB);
     }
 
     @Test

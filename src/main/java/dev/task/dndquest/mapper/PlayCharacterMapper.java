@@ -12,5 +12,6 @@ public interface PlayCharacterMapper {
     @Mapping(target = "playCharRaceName", source = "race.name")
     @Mapping(target = "items", source = "entity.items")
     PlayCharacterResponseDto matToDto(PlayCharacter entity);
+
     PlayCharacter mapToEntity(PlayCharacterRequestDto dto);
 }

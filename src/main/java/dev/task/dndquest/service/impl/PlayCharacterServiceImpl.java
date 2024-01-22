@@ -6,8 +6,8 @@ import dev.task.dndquest.model.ItemOperations;
 import dev.task.dndquest.model.dto.request.InventoryRequestDto;
 import dev.task.dndquest.model.dto.request.PlayCharacterRequestDto;
 import dev.task.dndquest.model.dto.response.InventoryResponseDto;
-import dev.task.dndquest.model.entity.item.Item;
 import dev.task.dndquest.model.entity.character.PlayCharacter;
+import dev.task.dndquest.model.entity.item.Item;
 import dev.task.dndquest.repository.PlayCharacterRepository;
 import dev.task.dndquest.service.ItemService;
 import dev.task.dndquest.service.PlayCharacterClassService;
@@ -36,7 +36,8 @@ public class PlayCharacterServiceImpl implements PlayCharacterService {
     }
 
     @Override
-    public List<InventoryResponseDto> manageItem(Long characterId, List<InventoryRequestDto> items) {
+    public List<InventoryResponseDto> manageItem(
+            Long characterId, List<InventoryRequestDto> items) {
         PlayCharacter character = repository.findById(characterId)
                                             .orElseThrow(CharNotFoundException::new);
         applyOperationWithItems(character, items);
@@ -45,17 +46,20 @@ public class PlayCharacterServiceImpl implements PlayCharacterService {
 
     @Override
     public List<InventoryResponseDto> getAllItems(Long characterId) {
-        PlayCharacter character = repository.findById(characterId).orElseThrow(CharNotFoundException::new);
+        PlayCharacter character = repository.findById(characterId)
+                .orElseThrow(CharNotFoundException::new);
         return mapper.matToDto(character).getItems();
     }
 
-    private void applyOperationWithItems(PlayCharacter character, List<InventoryRequestDto> items) {
+    private void applyOperationWithItems(
+            PlayCharacter character, List<InventoryRequestDto> items) {
         items.forEach(inventoryDto -> {
             Item item = itemService.findByName(inventoryDto.getItem());
             Map<Item, Integer> itemsInInventory = character.getItems();
             Integer totalItemsCount = ItemOperations.getMap()
                     .get(inventoryDto.getOperation())
-                    .applyOperation(itemsInInventory.getOrDefault(item, 0), inventoryDto.getCount());
+                    .applyOperation(itemsInInventory.getOrDefault(item, 0),
+                            inventoryDto.getCount());
             itemsInInventory.put(item, totalItemsCount);
         });
     }

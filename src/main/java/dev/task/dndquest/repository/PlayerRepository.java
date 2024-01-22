@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PlayerRepository extends JpaRepository<Player, Long> {
     Optional<Player> findByLogin(String login);
+
     Boolean existsByLogin(String login);
 }

@@ -20,7 +20,6 @@ class PlayerRepositoryTest {
     private static final String TEST_LOGIN = "Tim";
     private static final String TEST_WRONG_LOGIN = "notExist";
     private static final String TEST_PASSWORD = "qwertyu1";
-
     @Autowired
     private PlayerRepository repository;
     private Player playerFromDB;

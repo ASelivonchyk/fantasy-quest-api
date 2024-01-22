@@ -1,8 +1,8 @@
 package dev.task.dndquest.security.authentication;
 
 import dev.task.dndquest.exception.BadCredentialsException;
-import dev.task.dndquest.model.dto.response.AuthenticationResponseDto;
 import dev.task.dndquest.model.dto.request.PlayerRequestDto;
+import dev.task.dndquest.model.dto.response.AuthenticationResponseDto;
 import dev.task.dndquest.model.entity.Player;
 import dev.task.dndquest.security.jwt.JwtProvider;
 import dev.task.dndquest.service.PlayerService;

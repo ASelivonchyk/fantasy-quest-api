@@ -32,8 +32,8 @@ public class WebSecurityConfig {
     private final JwtFilter jwtFilter;
 
     @Bean
-    public AuthenticationManager authenticationManager() throws Exception {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+    public AuthenticationManager authenticationManager() {
+        var authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return new ProviderManager(authProvider);
@@ -48,7 +48,7 @@ public class WebSecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authorize) -> authorize
+                .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(FORWARD, ERROR).permitAll()
                         .requestMatchers(HttpMethod.POST, ALLOWED_URL).permitAll()
                         .anyRequest().authenticated())

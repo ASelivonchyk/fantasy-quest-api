@@ -1,8 +1,8 @@
 package dev.task.dndquest.model.dto.request;
 
 import dev.task.dndquest.model.ItemOperations;
-import dev.task.dndquest.validator.annotation.ItemConstraint;
 import dev.task.dndquest.validator.annotation.EnumOperation;
+import dev.task.dndquest.validator.annotation.ItemConstraint;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

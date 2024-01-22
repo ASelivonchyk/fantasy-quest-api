@@ -18,17 +18,18 @@ public class AdventureController {
     private final StoryLineService storyLineService;
 
     @GetMapping("/available")
-    public List<StoryLineShortResponseDto> getAvailableAdventures(Authentication auth){
+    public List<StoryLineShortResponseDto> getAvailableAdventures(Authentication auth) {
         return storyLineService.getAvailableStoryLines(auth);
     }
 
     @GetMapping("/available/new")
-    public List<StoryLineShortResponseDto> addAvailableAdventures(Authentication auth){
+    public List<StoryLineShortResponseDto> addAvailableAdventures(Authentication auth) {
         return storyLineService.addNewStoryLinesForAvailable(auth);
     }
 
     @GetMapping("/available/{serial}")
-    public StoryLineFullResponseDto selectAdventure(@PathVariable Integer serial, Authentication auth){
+    public StoryLineFullResponseDto selectAdventure(
+            @PathVariable Integer serial, Authentication auth) {
         return storyLineService.selectStoryline(serial, auth);
     }
 }
