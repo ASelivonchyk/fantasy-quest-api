@@ -5,6 +5,7 @@ import dev.task.dndquest.exception.DuplicateLoginException;
 import dev.task.dndquest.mapper.PlayerMapper;
 import dev.task.dndquest.model.dto.request.PlayerRequestDto;
 import dev.task.dndquest.model.entity.Player;
+import dev.task.dndquest.model.entity.character.PlayCharacter;
 import dev.task.dndquest.repository.PlayerRepository;
 import dev.task.dndquest.service.PlayerService;
 import lombok.RequiredArgsConstructor;
@@ -38,5 +39,12 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public Boolean existsByLogin(String login) {
         return repository.existsByLogin(login);
+    }
+
+    @Override
+    public Player addCharacterToPlayer(PlayCharacter character, String playerLogin){
+        Player player = findByLogin(playerLogin);
+        player.setCharacter(character);
+        return repository.save(player);
     }
 }

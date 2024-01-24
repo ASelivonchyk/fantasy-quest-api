@@ -8,6 +8,8 @@ import dev.task.dndquest.security.jwt.JwtProvider;
 import dev.task.dndquest.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +29,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         String token = jwtProvider.generateToken(dto.getLogin());
         return new AuthenticationResponseDto(token, HttpStatus.OK);
+    }
+
+    @Override
+    public String getPlayerLoginFromAuthentication() {
+        return ((User) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUsername();
     }
 }

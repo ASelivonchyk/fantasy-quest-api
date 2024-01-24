@@ -1,12 +1,16 @@
 package dev.task.dndquest.service.impl;
 
 import dev.task.dndquest.exception.StoryLineNotFoundException;
+import dev.task.dndquest.mapper.AdventureMapper;
 import dev.task.dndquest.mapper.StoryLineMapper;
+import dev.task.dndquest.model.dto.request.AdventureRequestDto;
 import dev.task.dndquest.model.dto.response.StoryLineFullResponseDto;
 import dev.task.dndquest.model.dto.response.StoryLineShortResponseDto;
 import dev.task.dndquest.model.dto.response.StoryShortResponseDto;
+import dev.task.dndquest.model.entity.adventure.StoryLine;
 import dev.task.dndquest.parser.AiChatResponseParser;
 import dev.task.dndquest.repository.StoryLineRepository;
+import dev.task.dndquest.service.AdventureService;
 import dev.task.dndquest.service.StoryLineService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +37,8 @@ public class StoryLineServiceImpl implements StoryLineService {
     private final AiChatResponseParser parser;
     private final StoryLineMapper storyLineMapper;
     private final StoryLineRepository repository;
+    private final AdventureService adventureService;
+    private final AdventureMapper adventureMapper;
     private List<StoryLineFullResponseDto> availableStoryLines;
 
     @Override
@@ -78,7 +84,14 @@ public class StoryLineServiceImpl implements StoryLineService {
         } catch (IndexOutOfBoundsException e) {
             throw new StoryLineNotFoundException();
         }
-        repository.save(storyLineMapper.mapToEntity(storyLineDto));
+        /*
+        TODO:
+        1.Adventure -> saveAdventure
+        2.PlayCharacter -> addAdventure
+        */
+        StoryLine save = repository.save(storyLineMapper.mapToEntity(storyLineDto));
+        AdventureRequestDto adventureRequestDto = adventureMapper.mapStoryLineToAdventureDto(save);
+        adventureService.save(adventureRequestDto);
         return "done";
     }
 
