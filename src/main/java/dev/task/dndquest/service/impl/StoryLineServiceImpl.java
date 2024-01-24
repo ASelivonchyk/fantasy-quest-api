@@ -6,12 +6,15 @@ import dev.task.dndquest.model.dto.response.StoryLineFullResponseDto;
 import dev.task.dndquest.model.dto.response.StoryLineShortResponseDto;
 import dev.task.dndquest.model.dto.response.StoryShortResponseDto;
 import dev.task.dndquest.parser.AiChatResponseParser;
+import dev.task.dndquest.repository.StoryLineRepository;
 import dev.task.dndquest.service.StoryLineService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.ChatClient;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -29,13 +32,16 @@ public class StoryLineServiceImpl implements StoryLineService {
     private final ChatClient aiClient;
     private final AiChatResponseParser parser;
     private final StoryLineMapper storyLineMapper;
-    private List<StoryLineShortResponseDto> availableStoryLines;
+    private final StoryLineRepository repository;
+    private List<StoryLineFullResponseDto> availableStoryLines;
 
     @Override
     @Cacheable(value = "ps", key = "#auth")
     public List<StoryLineShortResponseDto> getAvailableStoryLines(Authentication auth) {
         availableStoryLines = initAvailableStoryLines(FIRST_SERIAL_NUM);
-        return availableStoryLines;
+        return availableStoryLines.stream()
+                .map(storyLineMapper::mapFullToShortDto)
+                .toList();
     }
 
     @Override
@@ -43,24 +49,40 @@ public class StoryLineServiceImpl implements StoryLineService {
     public List<StoryLineShortResponseDto> addNewStoryLinesForAvailable(Authentication auth) {
         availableStoryLines.addAll(
                 initAvailableStoryLines(Integer.toString(availableStoryLines.size() + 1)));
-        return availableStoryLines;
+        return availableStoryLines.stream()
+                .map(storyLineMapper::mapFullToShortDto)
+                .toList();
     }
 
     @Override
     @Cacheable(value = "sl", key = "{#serialNumber, #auth}")
-    public StoryLineFullResponseDto selectStoryline(Integer serialNumber, Authentication auth) {
-        StoryLineShortResponseDto storyLine;
+    public StoryLineFullResponseDto selectStoryLine(Integer serialNumber, Authentication auth) {
+        StoryLineFullResponseDto storyLineDto;
         try {
-            storyLine = availableStoryLines.get(serialNumber - 1);
+            storyLineDto = availableStoryLines.get(serialNumber - 1);
         } catch (IndexOutOfBoundsException e) {
             throw new StoryLineNotFoundException();
         }
-        StoryLineFullResponseDto fullStoryLineDto = storyLineMapper.mapShortToFullDto(storyLine);
-        fullStoryLineDto.setStories(initStories(createFullStoryPrompt(storyLine)));
-        return fullStoryLineDto;
+        storyLineDto.setStories(initStories(createFullStoryPrompt(storyLineDto)));
+        return storyLineDto;
     }
 
-    private List<StoryLineShortResponseDto> initAvailableStoryLines(String storyLineSerialNumber) {
+    @Override
+    @Caching(evict = {
+            @CacheEvict(value = "sl", key = "{#serialNumber, #auth}"),
+            @CacheEvict(value = "ps", key = "#auth")})
+    public String startStoryLine(Integer serialNumber, Authentication auth) {
+        StoryLineFullResponseDto storyLineDto;
+        try {
+            storyLineDto = availableStoryLines.get(serialNumber - 1);
+        } catch (IndexOutOfBoundsException e) {
+            throw new StoryLineNotFoundException();
+        }
+        repository.save(storyLineMapper.mapToEntity(storyLineDto));
+        return "done";
+    }
+
+    private List<StoryLineFullResponseDto> initAvailableStoryLines(String storyLineSerialNumber) {
         return parser.parseMultipleStoryLinesFromJson(
                         aiClient.generate(PROMPT_STORYLINES + storyLineSerialNumber));
     }
@@ -69,7 +91,7 @@ public class StoryLineServiceImpl implements StoryLineService {
         return parser.parseMultipleStoriesFromJson(aiClient.generate(storyPrompt));
     }
 
-    private String createFullStoryPrompt(StoryLineShortResponseDto storyLine) {
+    private String createFullStoryPrompt(StoryLineFullResponseDto storyLine) {
         String promptMiddle = String.format("tile: %s and description: %s.",
                 storyLine.getTitle(), storyLine.getDescription());
         return String.format("%s %s %s",PROMPT_STORY_START, promptMiddle, PROMPT_STORY_END);
