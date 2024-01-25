@@ -2,6 +2,7 @@ package dev.task.dndquest.model.entity.adventure;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,7 +26,7 @@ public class StoryLine {
     private Long id;
     private String title;
     private String description;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "storylines_stories",
             joinColumns = @JoinColumn(name = "storyline_id"),
             inverseJoinColumns = @JoinColumn(name = "story_id"))

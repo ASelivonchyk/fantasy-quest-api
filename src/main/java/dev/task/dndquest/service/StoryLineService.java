@@ -12,5 +12,5 @@ public interface StoryLineService {
 
     StoryLineFullResponseDto selectStoryLine(Integer serialNumber, Authentication authentication);
 
-    String startStoryLine(Integer serialNumber, Authentication authentication);
+    void startStoryLine(Integer serialNumber, Authentication authentication);
 }

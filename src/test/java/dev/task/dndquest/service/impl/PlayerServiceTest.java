@@ -5,6 +5,7 @@ import dev.task.dndquest.exception.DuplicateLoginException;
 import dev.task.dndquest.mapper.PlayerMapper;
 import dev.task.dndquest.model.dto.request.PlayerRequestDto;
 import dev.task.dndquest.model.entity.Player;
+import dev.task.dndquest.model.entity.character.PlayCharacter;
 import dev.task.dndquest.repository.PlayerRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
@@ -38,7 +39,7 @@ class PlayerServiceTest {
     @BeforeAll
     static void init() {
         dto = new PlayerRequestDto(TEST_LOGIN, TEST_PASS);
-        player = new Player(1L, TEST_LOGIN, TEST_PASS);
+        player = new Player(1L, TEST_LOGIN, TEST_PASS, null);
     }
 
     @Test
@@ -79,5 +80,14 @@ class PlayerServiceTest {
     void whenExistByLoginAndPlayerNotExistsInDB_thenReturnFalse_ok() {
         when(repository.existsByLogin(TEST_LOGIN)).thenReturn(false);
         assertThat(service.existsByLogin(TEST_LOGIN)).isFalse();
+    }
+
+    @Test
+    void whenPlayerNotExistInDB_thenAddCharacterToPlayer_ThrowException() {
+        when(repository.findByLogin(TEST_LOGIN)).thenReturn(Optional.empty());
+        PlayCharacter character = new PlayCharacter();
+        assertThatThrownBy(() ->
+                service.addCharacterToPlayer(character, TEST_LOGIN))
+                .isInstanceOf(BadCredentialsException.class);
     }
 }

@@ -2,44 +2,26 @@ package dev.task.dndquest.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import dev.task.dndquest.TestWebSecurityConfig;
 import dev.task.dndquest.exception.CharNotFoundException;
 import dev.task.dndquest.model.dto.request.InventoryRequestDto;
 import dev.task.dndquest.model.dto.request.PlayCharacterRequestDto;
 import dev.task.dndquest.model.dto.response.ExceptionResponseDto;
 import dev.task.dndquest.model.dto.response.InventoryResponseDto;
-import dev.task.dndquest.repository.PlayCharacterRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
-@Import(TestWebSecurityConfig.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(locations = "classpath:application-test.properties")
 @Sql("/test-data.sql")
-class PlayCharacterControllerTest {
-    @Autowired
-    private TestRestTemplate restTemplate;
+class PlayCharacterControllerTest extends GenericControllerTest {
     private PlayCharacterRequestDto characterRequestDto;
-
-    @AfterAll
-    static void clearDBAfterTests(@Autowired PlayCharacterRepository repository) {
-        repository.deleteAll();
-    }
 
     @BeforeEach
     public void initEach() {
@@ -52,8 +34,8 @@ class PlayCharacterControllerTest {
         var dtoToSave = new PlayCharacterRequestDto(
                 "Bil", "fighter", "orc", 10, 10, 10, 10, 10, 10);
         ResponseEntity<PlayCharacterRequestDto> response =
-                restTemplate.postForEntity("/api/character", dtoToSave,
-                        PlayCharacterRequestDto.class);
+                restTemplate.postForEntity("/api/character",
+                        new HttpEntity<>(dtoToSave, jwt), PlayCharacterRequestDto.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
@@ -62,7 +44,7 @@ class PlayCharacterControllerTest {
         characterRequestDto.setName("");
         ResponseEntity<List<ExceptionResponseDto>> response =
                 restTemplate.exchange("/api/character", HttpMethod.POST,
-                        new HttpEntity<>(characterRequestDto),
+                        new HttpEntity<>(characterRequestDto, jwt),
                         new ParameterizedTypeReference<>() {});
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.PRECONDITION_FAILED);
         assertThat(response.getBody()).isNotNull();
@@ -75,7 +57,7 @@ class PlayCharacterControllerTest {
         characterRequestDto.setCharisma(1);
         ResponseEntity<List<ExceptionResponseDto>> response =
                 restTemplate.exchange("/api/character", HttpMethod.POST,
-                        new HttpEntity<>(characterRequestDto),
+                        new HttpEntity<>(characterRequestDto, jwt),
                         new ParameterizedTypeReference<>() {});
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.PRECONDITION_FAILED);
         assertThat(response.getBody()).isNotNull();
@@ -88,7 +70,7 @@ class PlayCharacterControllerTest {
         characterRequestDto.setPlayCharRace("wrong");
         ResponseEntity<List<ExceptionResponseDto>> response =
                 restTemplate.exchange("/api/character", HttpMethod.POST,
-                        new HttpEntity<>(characterRequestDto),
+                        new HttpEntity<>(characterRequestDto, jwt),
                         new ParameterizedTypeReference<>() {});
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.PRECONDITION_FAILED);
         assertThat(response.getBody()).isNotNull();
@@ -101,7 +83,7 @@ class PlayCharacterControllerTest {
         characterRequestDto.setPlayCharClass("wrong");
         ResponseEntity<List<ExceptionResponseDto>> response =
                 restTemplate.exchange("/api/character", HttpMethod.POST,
-                        new HttpEntity<>(characterRequestDto),
+                        new HttpEntity<>(characterRequestDto, jwt),
                         new ParameterizedTypeReference<>() {});
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.PRECONDITION_FAILED);
         assertThat(response.getBody()).isNotNull();
@@ -118,7 +100,7 @@ class PlayCharacterControllerTest {
                new InventoryRequestDto("shield", 1, "add"));
         ResponseEntity<List<InventoryResponseDto>> response =
                 restTemplate.exchange("/api/character/{id}/inventory", HttpMethod.PUT,
-                        new HttpEntity<>(addRequestDto),
+                        new HttpEntity<>(addRequestDto, jwt),
                         new ParameterizedTypeReference<>() {}, variable);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
@@ -135,7 +117,7 @@ class PlayCharacterControllerTest {
         var removeRequestDto = List.of(new InventoryRequestDto("sword", 1, "remove"));
         ResponseEntity<List<InventoryResponseDto>> response =
                 restTemplate.exchange("/api/character/{id}/inventory", HttpMethod.PUT,
-                        new HttpEntity<>(removeRequestDto),
+                        new HttpEntity<>(removeRequestDto, jwt),
                         new ParameterizedTypeReference<>() {}, variable);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
@@ -149,7 +131,8 @@ class PlayCharacterControllerTest {
         var addRequestDto = List.of(new InventoryRequestDto("shield", 2, "add"));
         ResponseEntity<CharNotFoundException> response =
                 restTemplate.exchange("/api/character/{id}/inventory", HttpMethod.PUT,
-                        new HttpEntity<>(addRequestDto), CharNotFoundException.class, variable);
+                        new HttpEntity<>(addRequestDto, jwt),
+                        CharNotFoundException.class, variable);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getMessage()).isEqualTo("no such character in database");
@@ -162,7 +145,7 @@ class PlayCharacterControllerTest {
         var removeRequestDto = List.of(new InventoryRequestDto("sword", 5, "remove"));
         ResponseEntity<IllegalArgumentException> response =
                 restTemplate.exchange("/api/character/{id}/inventory", HttpMethod.PUT,
-                        new HttpEntity<>(removeRequestDto),
+                        new HttpEntity<>(removeRequestDto, jwt),
                         IllegalArgumentException.class, variable);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNotNull();
@@ -176,7 +159,7 @@ class PlayCharacterControllerTest {
         var requestDto = List.of(new InventoryRequestDto("wrongItem", 1, "add"));
         ResponseEntity<List<ExceptionResponseDto>> response =
                 restTemplate.exchange("/api/character/{id}/inventory", HttpMethod.PUT,
-                        new HttpEntity<>(requestDto),
+                        new HttpEntity<>(requestDto, jwt),
                         new ParameterizedTypeReference<>() {}, variable);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNotNull();
@@ -190,7 +173,7 @@ class PlayCharacterControllerTest {
         var addRequestDto = List.of(new InventoryRequestDto("shield", 2, "wrongOperation"));
         ResponseEntity<List<ExceptionResponseDto>> response =
                 restTemplate.exchange("/api/character/{id}/inventory", HttpMethod.PUT,
-                        new HttpEntity<>(addRequestDto),
+                        new HttpEntity<>(addRequestDto, jwt),
                         new ParameterizedTypeReference<>() {}, variable);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNotNull();
@@ -202,7 +185,8 @@ class PlayCharacterControllerTest {
         Map<String, Integer> variable = new HashMap<>();
         variable.put("id", 1);
         ResponseEntity<List<InventoryResponseDto>> response =
-                restTemplate.exchange("/api/character/{id}/inventory", HttpMethod.GET, null,
+                restTemplate.exchange("/api/character/{id}/inventory", HttpMethod.GET,
+                        new HttpEntity<>(null, jwt),
                         new ParameterizedTypeReference<>() {}, variable);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().size()).isEqualTo(2);

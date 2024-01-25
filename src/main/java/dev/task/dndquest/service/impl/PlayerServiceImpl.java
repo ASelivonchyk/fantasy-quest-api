@@ -4,6 +4,7 @@ import dev.task.dndquest.exception.BadCredentialsException;
 import dev.task.dndquest.exception.DuplicateLoginException;
 import dev.task.dndquest.mapper.PlayerMapper;
 import dev.task.dndquest.model.dto.request.PlayerRequestDto;
+import dev.task.dndquest.model.dto.response.PlayerResponseDto;
 import dev.task.dndquest.model.entity.Player;
 import dev.task.dndquest.model.entity.character.PlayCharacter;
 import dev.task.dndquest.repository.PlayerRepository;
@@ -31,7 +32,6 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    @Cacheable(value = "player", key = "#login")
     public Player findByLogin(String login) {
         return repository.findByLogin(login).orElseThrow(BadCredentialsException::new);
     }
@@ -46,5 +46,12 @@ public class PlayerServiceImpl implements PlayerService {
         Player player = findByLogin(playerLogin);
         player.setCharacter(character);
         return repository.save(player);
+    }
+
+    @Override
+    @Cacheable(value = "player", key = "#login")
+    public PlayerResponseDto getPlayerCredentialsByLogin(String login) {
+        return  mapper.mapToDto(
+                repository.findByLogin(login).orElseThrow(BadCredentialsException::new));
     }
 }

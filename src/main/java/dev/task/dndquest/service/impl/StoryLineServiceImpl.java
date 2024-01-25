@@ -1,16 +1,13 @@
 package dev.task.dndquest.service.impl;
 
 import dev.task.dndquest.exception.StoryLineNotFoundException;
-import dev.task.dndquest.mapper.AdventureMapper;
 import dev.task.dndquest.mapper.StoryLineMapper;
-import dev.task.dndquest.model.dto.request.AdventureRequestDto;
 import dev.task.dndquest.model.dto.response.StoryLineFullResponseDto;
 import dev.task.dndquest.model.dto.response.StoryLineShortResponseDto;
 import dev.task.dndquest.model.dto.response.StoryShortResponseDto;
-import dev.task.dndquest.model.entity.adventure.StoryLine;
+import dev.task.dndquest.model.entity.adventure.Adventure;
 import dev.task.dndquest.parser.AiChatResponseParser;
-import dev.task.dndquest.repository.StoryLineRepository;
-import dev.task.dndquest.service.AdventureService;
+import dev.task.dndquest.service.PlayCharacterService;
 import dev.task.dndquest.service.StoryLineService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +33,7 @@ public class StoryLineServiceImpl implements StoryLineService {
     private final ChatClient aiClient;
     private final AiChatResponseParser parser;
     private final StoryLineMapper storyLineMapper;
-    private final StoryLineRepository repository;
-    private final AdventureService adventureService;
-    private final AdventureMapper adventureMapper;
+    private final PlayCharacterService playCharacterService;
     private List<StoryLineFullResponseDto> availableStoryLines;
 
     @Override
@@ -77,31 +72,24 @@ public class StoryLineServiceImpl implements StoryLineService {
     @Caching(evict = {
             @CacheEvict(value = "sl", key = "{#serialNumber, #auth}"),
             @CacheEvict(value = "ps", key = "#auth")})
-    public String startStoryLine(Integer serialNumber, Authentication auth) {
+    public void startStoryLine(Integer serialNumber, Authentication auth) {
         StoryLineFullResponseDto storyLineDto;
         try {
             storyLineDto = availableStoryLines.get(serialNumber - 1);
         } catch (IndexOutOfBoundsException e) {
             throw new StoryLineNotFoundException();
         }
-        /*
-        TODO:
-        1.Adventure -> saveAdventure
-        2.PlayCharacter -> addAdventure
-        */
-        StoryLine save = repository.save(storyLineMapper.mapToEntity(storyLineDto));
-        AdventureRequestDto adventureRequestDto = adventureMapper.mapStoryLineToAdventureDto(save);
-        adventureService.save(adventureRequestDto);
-        return "done";
+        playCharacterService.addAdventure(
+                        new Adventure(storyLineMapper.mapToEntity(storyLineDto)));
     }
 
     private List<StoryLineFullResponseDto> initAvailableStoryLines(String storyLineSerialNumber) {
         return parser.parseMultipleStoryLinesFromJson(
-                        aiClient.generate(PROMPT_STORYLINES + storyLineSerialNumber));
+                        aiClient.call(PROMPT_STORYLINES + storyLineSerialNumber));
     }
 
     private List<StoryShortResponseDto> initStories(String storyPrompt) {
-        return parser.parseMultipleStoriesFromJson(aiClient.generate(storyPrompt));
+        return parser.parseMultipleStoriesFromJson(aiClient.call(storyPrompt));
     }
 
     private String createFullStoryPrompt(StoryLineFullResponseDto storyLine) {

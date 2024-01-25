@@ -2,8 +2,20 @@ package dev.task.dndquest.model.entity.character;
 
 import dev.task.dndquest.model.entity.adventure.Adventure;
 import dev.task.dndquest.model.entity.item.Item;
-import jakarta.persistence.*;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapKeyJoinColumn;
+import jakarta.persistence.Table;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,7 +49,7 @@ public class PlayCharacter {
     @MapKeyJoinColumn(name = "items_id")
     @Column(name = "items_count")
     private Map<Item, Integer> items;
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "characters_games",
             joinColumns = @JoinColumn(name = "character_id"),

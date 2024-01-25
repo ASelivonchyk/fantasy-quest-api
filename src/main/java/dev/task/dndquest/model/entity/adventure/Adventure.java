@@ -29,4 +29,8 @@ public class Adventure {
     private Story currentStory;
     private int sceneCount;
     private int currentStoryPart;
+
+    public Adventure(StoryLine storyLine) {
+        this.storyLine = storyLine;
+    }
 }

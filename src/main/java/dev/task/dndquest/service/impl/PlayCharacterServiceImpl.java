@@ -6,6 +6,7 @@ import dev.task.dndquest.model.ItemOperations;
 import dev.task.dndquest.model.dto.request.InventoryRequestDto;
 import dev.task.dndquest.model.dto.request.PlayCharacterRequestDto;
 import dev.task.dndquest.model.dto.response.InventoryResponseDto;
+import dev.task.dndquest.model.entity.adventure.Adventure;
 import dev.task.dndquest.model.entity.character.PlayCharacter;
 import dev.task.dndquest.model.entity.item.Item;
 import dev.task.dndquest.repository.PlayCharacterRepository;
@@ -31,7 +32,6 @@ public class PlayCharacterServiceImpl implements PlayCharacterService {
     private final ItemService itemService;
     private final PlayCharacterMapper mapper;
 
-
     @Override
     public PlayCharacter save(PlayCharacterRequestDto dto) {
         PlayCharacter playCharacterToSave = mapper.mapToEntity(dto);
@@ -46,17 +46,29 @@ public class PlayCharacterServiceImpl implements PlayCharacterService {
     @Override
     public List<InventoryResponseDto> manageItem(
             Long characterId, List<InventoryRequestDto> items) {
-        PlayCharacter character = repository.findById(characterId)
-                                            .orElseThrow(CharNotFoundException::new);
+        PlayCharacter character = findById(characterId);
         applyOperationWithItems(character, items);
         return mapper.matToDto(repository.save(character)).getItems();
     }
 
     @Override
     public List<InventoryResponseDto> getAllItems(Long characterId) {
-        PlayCharacter character = repository.findById(characterId)
-                .orElseThrow(CharNotFoundException::new);
+        PlayCharacter character = findById(characterId);
         return mapper.matToDto(character).getItems();
+    }
+
+    @Override
+    public void addAdventure(Adventure adventure) {
+        PlayCharacter character = playerService.findByLogin(
+                authService.getPlayerLoginFromAuthentication()).getCharacter();
+        character.setAdventure(adventure);
+        repository.save(character);
+    }
+
+    @Override
+    public PlayCharacter findById(Long id){
+        return repository.findById(id)
+                .orElseThrow(CharNotFoundException::new);
     }
 
     private void applyOperationWithItems(
