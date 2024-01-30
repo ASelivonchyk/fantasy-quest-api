@@ -37,6 +37,11 @@ public class AdventureController {
     @PostMapping("/available/{serial}")
     public String startAdventure(
             @PathVariable Integer serial, Authentication auth) {
-        return storyLineService.startStoryLine(serial, auth);
+        storyLineService.startStoryLine(serial, auth);
+        /* TODO:
+           create adventure endpoint to manage players adventures
+           and implement redirection to it from here
+        */
+        return "forward:/";
     }
 }

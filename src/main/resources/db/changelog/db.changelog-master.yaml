@@ -19,3 +19,7 @@ databaseChangeLog:
       # game schema
       file: add-adventure-schema.xml
       relativeToChangelogFile: true
+  - include:
+      # game schema
+      file: add-player_character-schema.xml
+      relativeToChangelogFile: true

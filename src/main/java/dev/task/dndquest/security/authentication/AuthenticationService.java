@@ -5,4 +5,6 @@ import dev.task.dndquest.model.dto.response.AuthenticationResponseDto;
 
 public interface AuthenticationService {
     AuthenticationResponseDto login(PlayerRequestDto dto);
+
+    String getPlayerLoginFromAuthentication();
 }

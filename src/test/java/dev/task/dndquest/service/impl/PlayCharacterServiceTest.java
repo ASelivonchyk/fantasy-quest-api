@@ -2,11 +2,14 @@ package dev.task.dndquest.service.impl;
 
 import dev.task.dndquest.mapper.PlayCharacterMapper;
 import dev.task.dndquest.model.dto.request.PlayCharacterRequestDto;
+import dev.task.dndquest.model.entity.Player;
 import dev.task.dndquest.model.entity.character.PlayCharacter;
 import dev.task.dndquest.model.entity.character.PlayCharacterClass;
 import dev.task.dndquest.model.entity.character.Race;
 import dev.task.dndquest.repository.PlayCharacterRepository;
+import dev.task.dndquest.security.authentication.AuthenticationService;
 import dev.task.dndquest.service.PlayCharacterClassService;
+import dev.task.dndquest.service.PlayerService;
 import dev.task.dndquest.service.RaceService;
 import java.util.HashMap;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,7 +31,11 @@ class PlayCharacterServiceTest {
     @Mock
     private RaceService raceService;
     @Mock
-    PlayCharacterMapper mapper;
+    private PlayCharacterMapper mapper;
+    @Mock
+    private AuthenticationService authService;
+    @Mock
+    private PlayerService playerService;
     @InjectMocks
     private PlayCharacterServiceImpl service;
     private static PlayCharacterRequestDto dto;
@@ -48,11 +55,14 @@ class PlayCharacterServiceTest {
     }
 
     @Test
-    void savePlayCharacterClass_ok() {
+    void whenPlayCharacterClassValid_thenSavePlayCharacterClass_returnSavedCharacter() {
         when(mapper.mapToEntity(dto)).thenReturn(playCharacter);
         when(ppcService.findByName(pcClass.getName())).thenReturn(pcClass);
         when(raceService.findByName(race.getName())).thenReturn(race);
         when(repository.save(playCharacter)).thenReturn(playCharacter);
+        when(authService.getPlayerLoginFromAuthentication()).thenReturn("Tom");
+        when(playerService.addCharacterToPlayer(playCharacter, "Tom")).thenReturn(new Player());
         assertThat(service.save(dto)).isEqualTo(playCharacter);
     }
+
 }

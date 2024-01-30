@@ -26,7 +26,7 @@ class PlayerRepositoryTest {
 
     @BeforeAll
     public void setUp(){
-        playerFromDB = new Player(null, TEST_LOGIN, TEST_PASSWORD);
+        playerFromDB = new Player(null, TEST_LOGIN, TEST_PASSWORD, null);
         playerFromDB = repository.save(playerFromDB);
     }
 
@@ -37,7 +37,7 @@ class PlayerRepositoryTest {
 
     @Test
     void whenSaveToDB_thenReturnPlayer_ok() {
-        Player testPlayer = new Player(null, "Bob", TEST_PASSWORD);
+        Player testPlayer = new Player(null, "Bob", TEST_PASSWORD, null);
         assertThat(repository.save(testPlayer).getId()).isNotNull();
     }
 

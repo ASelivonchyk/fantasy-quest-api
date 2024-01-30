@@ -1,10 +1,14 @@
 package dev.task.dndquest.model.entity;
 
+import dev.task.dndquest.model.entity.character.PlayCharacter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.OneToOne;
 import java.util.Collection;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -25,7 +29,11 @@ public class Player implements UserDetails {
     private String login;
     @Column(nullable = false)
     private String password;
-    //private List<PlayCharacter> characters;
+    @OneToOne
+    @JoinTable(name = "players_characters",
+            joinColumns = @JoinColumn(name = "player_id"),
+            inverseJoinColumns = @JoinColumn(name = "character_id"))
+    private PlayCharacter character;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

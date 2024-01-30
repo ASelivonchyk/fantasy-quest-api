@@ -1,7 +1,7 @@
 package dev.task.dndquest.security;
 
 import dev.task.dndquest.exception.BadCredentialsException;
-import dev.task.dndquest.model.entity.Player;
+import dev.task.dndquest.model.dto.response.PlayerResponseDto;
 import dev.task.dndquest.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
@@ -16,9 +16,9 @@ public class UserDetailsServ implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String login) throws BadCredentialsException {
-        Player player = playerService.findByLogin(login);
+        PlayerResponseDto responseDto = playerService.getPlayerCredentialsByLogin(login);
         return User.withUsername(login)
-                .password(player.getPassword())
+                .password(responseDto.getPassword())
                 .build();
     }
 }

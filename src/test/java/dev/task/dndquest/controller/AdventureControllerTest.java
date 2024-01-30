@@ -2,60 +2,33 @@ package dev.task.dndquest.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import dev.task.dndquest.model.dto.request.PlayerRequestDto;
+import dev.task.dndquest.model.dto.request.PlayCharacterRequestDto;
 import dev.task.dndquest.model.dto.response.ExceptionResponseDto;
 import dev.task.dndquest.model.dto.response.StoryLineFullResponseDto;
 import dev.task.dndquest.model.dto.response.StoryLineShortResponseDto;
-import dev.task.dndquest.model.entity.adventure.StoryLine;
-import dev.task.dndquest.repository.StoryLineRepository;
-import dev.task.dndquest.security.authentication.AuthenticationService;
-import dev.task.dndquest.service.PlayerService;
+import dev.task.dndquest.model.entity.character.PlayCharacter;
+import dev.task.dndquest.service.PlayCharacterService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(locations = "classpath:application-test.properties")
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class AdventureControllerTest {
-    @Autowired
-    private TestRestTemplate restTemplate;
-    private MultiValueMap<String, String> authMap;
-
-    @BeforeAll
-    @CacheEvict(value = "ps", allEntries = true)
-    void init(@Autowired AuthenticationService authService,
-              @Autowired PlayerService playerService) {
-        PlayerRequestDto dto = new PlayerRequestDto("TestUser", "1qwerty2");
-        playerService.save(dto);
-        authMap = new LinkedMultiValueMap<>();
-        authMap.put("Authorization", List.of("Bearer " + authService.login(dto).getToken()));
-    }
-
+class AdventureControllerTest extends GenericControllerTest {
     @Test
     @Order(1)
-    void getAvailableAdventures_returnListOfStoryLineShortResponseDto_ok() {
+    void whenPathValid_thenGetAvailableAdventures_returnListOfStoryLineShortResponseDto() {
         var response = restTemplate.exchange(
                 "/api/adventure/available", HttpMethod.GET,
-                new HttpEntity<>(null, authMap),
+                new HttpEntity<>(null, jwt),
                 new ParameterizedTypeReference<List<StoryLineShortResponseDto>>() {});
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
@@ -67,10 +40,10 @@ class AdventureControllerTest {
 
     @Test
     @Order(2)
-    void addAvailableAdventures_addingListOfStoryLineShortResponseDto_ok() {
+    void whenPathValid_thenAddAvailableAdventures_returnListOfStoryLineShortResponseDtoWithAddedData() {
         var response = restTemplate.exchange(
                 "/api/adventure/available/new", HttpMethod.GET,
-                new HttpEntity<>(null, authMap),
+                new HttpEntity<>(null, jwt),
                 new ParameterizedTypeReference<List<StoryLineShortResponseDto>>() {});
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
@@ -82,12 +55,12 @@ class AdventureControllerTest {
 
     @Test
     @Order(3)
-    void whenSerialOfAdventureIsValid_thenSelectAdventureReturnStoryLineFullResponseDto_ok() {
+    void whenSerialOfAdventureIsValid_thenSelectAdventure_returnStoryLineFullResponseDto() {
         Map<String, Integer> variable = new HashMap<>();
         variable.put("serial", 1);
         var response = restTemplate.exchange(
                 "/api/adventure/available/{serial}", HttpMethod.GET,
-                new HttpEntity<>(null, authMap),
+                new HttpEntity<>(null, jwt),
                 new ParameterizedTypeReference<StoryLineFullResponseDto>() {}, variable);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
@@ -95,12 +68,12 @@ class AdventureControllerTest {
 
     @Test
     @Order(4)
-    void whenSerialOfAdventureIsNotValid_thenSelectAdventureReturnServiceUnavailable_notOk() {
+    void whenSerialOfAdventureIsNotValid_thenSelectAdventure_returnServiceUnavailable() {
         Map<String, Integer> variable = new HashMap<>();
         variable.put("serial", 0);
         var response = restTemplate.exchange(
                 "/api/adventure/available/{serial}", HttpMethod.GET,
-                new HttpEntity<>(null, authMap),
+                new HttpEntity<>(null, jwt),
                 new ParameterizedTypeReference<ExceptionResponseDto>() {}, variable);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
         assertThat(response.getBody()).isNotNull();
@@ -109,29 +82,37 @@ class AdventureControllerTest {
 
     @Test
     @Order(5)
-    void whenSerialOfAdventureIsNotValid_thenStartAdventureSaveStoryLineFToDb_ok(
-            @Autowired StoryLineRepository repository) {
+    void whenSerialOfAdventureIsValid_thenStartAdventure_returnStatusOkAndSaveDataToDb(
+            @Autowired PlayCharacterService characterService) {
+        PlayCharacter savedCharacter = characterService.save(
+                new PlayCharacterRequestDto("Bil", "fighter", "orc", 10, 10, 10, 10, 10, 10));
         Map<String, Integer> variable = new HashMap<>();
         variable.put("serial", 1);
         var response = restTemplate.exchange(
                 "/api/adventure/available/{serial}", HttpMethod.POST,
-                new HttpEntity<>(null, authMap),
+                new HttpEntity<>(null, jwt),
                 new ParameterizedTypeReference<String>() {}, variable);
-        StoryLine storyLine = repository.findAll().get(0);
+        PlayCharacter character = characterService.findById(savedCharacter.getId());
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
-        assertThat(storyLine.getDescription()).isNotNull();
-        assertThat(storyLine.getTitle()).isNotNull();
+        assertThat(character.getAdventure()).isNotNull();
+        assertThat(character.getAdventure().getStoryLine()).isNotNull();
+        assertThat(character.getAdventure().getStoryLine().getDescription()).isNotNull();
+        assertThat(character.getAdventure().getStoryLine().getDescription()).isNotNull();
+        assertThat(character.getAdventure().getStoryLine().getStories()).isNotNull();
+        assertThat(character.getAdventure().getStoryLine().getStories().size()).isEqualTo(4);
+        assertThat(character.getAdventure().getStoryLine().getStories().get(0).getStory()).isNotNull();
+        assertThat(character.getAdventure().getStoryLine().getStories().get(0).getDescription()).isNotNull();
     }
 
     @Test
     @Order(6)
-    void whenSerialOfAdventureIsNotValid_thenStartAdventureReturnServiceUnavailable_notOk() {
+    void whenSerialOfAdventureIsNotValid_thenStartAdventure_returnServiceUnavailable() {
         Map<String, Integer> variable = new HashMap<>();
         variable.put("serial", 0);
         var response = restTemplate.exchange(
                 "/api/adventure/available/{serial}", HttpMethod.POST,
-                new HttpEntity<>(null, authMap),
+                new HttpEntity<>(null, jwt),
                 new ParameterizedTypeReference<ExceptionResponseDto>() {}, variable);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
         assertThat(response.getBody()).isNotNull();
