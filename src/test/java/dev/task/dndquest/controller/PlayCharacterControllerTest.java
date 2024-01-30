@@ -30,7 +30,7 @@ class PlayCharacterControllerTest extends GenericControllerTest {
     }
 
     @Test
-    void whenPlayCharacterCreated_thenReturnStatusCreated_ok() {
+    void whenPlayCharacterParametersIsValid_thenSaveCharacterToDbAndReturnStatusCreated() {
         var dtoToSave = new PlayCharacterRequestDto(
                 "Bil", "fighter", "orc", 10, 10, 10, 10, 10, 10);
         ResponseEntity<PlayCharacterRequestDto> response =
@@ -40,7 +40,7 @@ class PlayCharacterControllerTest extends GenericControllerTest {
     }
 
     @Test
-    void whenPlayCharacterNameWrong_thenCreateMethodReturnStatusPreconditionFailed_notOk() {
+    void whenPlayCharacterNameWrong_thenReturnStatusPreconditionFailed() {
         characterRequestDto.setName("");
         ResponseEntity<List<ExceptionResponseDto>> response =
                 restTemplate.exchange("/api/character", HttpMethod.POST,
@@ -53,7 +53,7 @@ class PlayCharacterControllerTest extends GenericControllerTest {
     }
 
     @Test
-    void whenPlayCharacterParamWrong_thenCreateMethodReturnStatusPreconditionFailed_notOk() {
+    void whenPlayCharacterStatsWrong_thenReturnStatusPreconditionFailed() {
         characterRequestDto.setCharisma(1);
         ResponseEntity<List<ExceptionResponseDto>> response =
                 restTemplate.exchange("/api/character", HttpMethod.POST,
@@ -66,7 +66,7 @@ class PlayCharacterControllerTest extends GenericControllerTest {
     }
 
     @Test
-    void whenPlayCharacterRaceWrong_thenCreateMethodReturnStatusPreconditionFailed_notOk() {
+    void whenPlayCharacterRaceWrong_thenReturnStatusPreconditionFailed() {
         characterRequestDto.setPlayCharRace("wrong");
         ResponseEntity<List<ExceptionResponseDto>> response =
                 restTemplate.exchange("/api/character", HttpMethod.POST,
@@ -79,7 +79,7 @@ class PlayCharacterControllerTest extends GenericControllerTest {
     }
 
     @Test
-    void whenPlayCharacterClassWrong_thenCreateMethodReturnStatusPreconditionFailed_notOk() {
+    void whenPlayCharacterClassWrong_thenReturnStatusPreconditionFailed() {
         characterRequestDto.setPlayCharClass("wrong");
         ResponseEntity<List<ExceptionResponseDto>> response =
                 restTemplate.exchange("/api/character", HttpMethod.POST,
@@ -93,7 +93,7 @@ class PlayCharacterControllerTest extends GenericControllerTest {
     @Test
     @Sql(statements = "DELETE FROM inventory WHERE character_id = 1 AND items_id = 2",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    void whenCharacterExistInDBAndInventoryDtoValid_thenAddItemReturnCharactersInventoryWithChanges_ok() {
+    void whenRequestForAddingItemValid_thenReturnCharactersInventoryWithChanges() {
         Map<String, Integer> variable = new HashMap<>();
         variable.put("id", 1);
         var addRequestDto = List.of(new InventoryRequestDto("shield", 2, "add"),
@@ -111,7 +111,7 @@ class PlayCharacterControllerTest extends GenericControllerTest {
     @Test
     @Sql(statements = "UPDATE inventory SET items_count = 1 WHERE character_id = 1 AND items_id = 1",
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    void whenCharacterExistInDBAndInventoryDtoValid_thenSubtractItemReturnCharactersInventoryWithChanges_ok() {
+    void whenRequestForRemovingItemValid_thenReturnCharactersInventoryWithChanges() {
         Map<String, Integer> variable = new HashMap<>();
         variable.put("id", 1);
         var removeRequestDto = List.of(new InventoryRequestDto("sword", 1, "remove"));
@@ -125,7 +125,7 @@ class PlayCharacterControllerTest extends GenericControllerTest {
     }
 
     @Test
-    void whenCharacterNotExistInDB_thenManageItemMethodReturnStatusPreconditionFailed_notOk() {
+    void whenCharacterNotExistInDB_thenReturnStatusPreconditionFailed() {
         Map<String, Integer> variable = new HashMap<>();
         variable.put("id", 10);
         var addRequestDto = List.of(new InventoryRequestDto("shield", 2, "add"));
@@ -139,7 +139,7 @@ class PlayCharacterControllerTest extends GenericControllerTest {
     }
 
     @Test
-    void whenSubtractResultLowerThanZero_thenSubtractItemReturnStatusBadRequest_notOk() {
+    void whenRemovingResultLowerThanZero_thenReturnStatusBadRequest() {
         Map<String, Integer> variable = new HashMap<>();
         variable.put("id", 1);
         var removeRequestDto = List.of(new InventoryRequestDto("sword", 5, "remove"));
@@ -153,7 +153,7 @@ class PlayCharacterControllerTest extends GenericControllerTest {
     }
 
     @Test
-    void whenItemNotExistInDB_thenManageItemMethodReturnStatusBadRequest_notOk() {
+    void whenItemNotExistInDB_thenReturnStatusBadRequest() {
         Map<String, Integer> variable = new HashMap<>();
         variable.put("id", 1);
         var requestDto = List.of(new InventoryRequestDto("wrongItem", 1, "add"));
@@ -167,7 +167,7 @@ class PlayCharacterControllerTest extends GenericControllerTest {
     }
 
     @Test
-    void whenItemOperationNotValid_thenManageItemReturnStatusPreconditionFailed_notOk() {
+    void whenItemOperationNotValid_thenReturnStatusPreconditionFailed() {
         Map<String, Integer> variable = new HashMap<>();
         variable.put("id", 1);
         var addRequestDto = List.of(new InventoryRequestDto("shield", 2, "wrongOperation"));
@@ -181,7 +181,7 @@ class PlayCharacterControllerTest extends GenericControllerTest {
     }
 
     @Test
-    void whenCharacterExistInDB_thenGetAllItemsReturnCharactersInventory_ok() {
+    void whenCharacterExistInDB_thenReturnCharactersInventory_ok() {
         Map<String, Integer> variable = new HashMap<>();
         variable.put("id", 1);
         ResponseEntity<List<InventoryResponseDto>> response =

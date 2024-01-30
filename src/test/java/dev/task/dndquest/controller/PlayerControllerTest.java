@@ -1,5 +1,7 @@
 package dev.task.dndquest.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import dev.task.dndquest.model.dto.request.PlayerRequestDto;
 import dev.task.dndquest.repository.PlayerRepository;
 import dev.task.dndquest.service.PlayerService;
@@ -12,8 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:application-test.properties")
@@ -32,12 +32,12 @@ class PlayerControllerTest {
     }
 
     @AfterAll
-    void clearDBAfterTests(@Autowired PlayerRepository repository) {
+    void clearDbAfterTests(@Autowired PlayerRepository repository) {
         repository.deleteAll();
     }
 
     @Test
-    void whenRegisterPlayerParamValid_thenReturnStatusCreated_ok() {
+    void whenPlayerParametersValid_thenSavePlayerToBdAndReturnStatusCreated() {
         var response = restTemplate.postForEntity("/api/player/register",
                 new PlayerRequestDto("Bob", PLAYER_PASS),
                 PlayerRequestDto.class);
@@ -45,7 +45,7 @@ class PlayerControllerTest {
     }
 
     @Test
-    void whenPlayerExistInDB_thenReturnStatusBadRequest_notOk() {
+    void whenPlayerExistInDB_thenReturnStatusBadRequest() {
         var response = restTemplate.postForEntity("/api/player/register",
                 dtoToSave, Object.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
@@ -53,7 +53,7 @@ class PlayerControllerTest {
     }
 
     @Test
-    void whenLoginPlayerParamValid_thenReturnJwtAndStatusOk_ok() {
+    void whenLoginRequestValid_thenReturnJwtAndStatusOk() {
         var response = restTemplate.postForEntity("/api/player/login",
                 dtoToSave, Object.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -61,7 +61,7 @@ class PlayerControllerTest {
     }
 
     @Test
-    void whenLoginIncorrect_thenReturnStatusBadRequest_notOk() {
+    void whenLoginIncorrect_thenReturnStatusBadRequest() {
         PlayerRequestDto dto = new PlayerRequestDto("wrong", PLAYER_PASS);
         var response = restTemplate.postForEntity("/api/player/login",
                 dto, Object.class);
@@ -70,7 +70,7 @@ class PlayerControllerTest {
     }
 
     @Test
-    void whenPasswordIncorrect_thenReturnStatusPreconditionFailed_notOk() {
+    void whenPasswordIncorrect_thenReturnStatusPreconditionFailed() {
         PlayerRequestDto dto = new PlayerRequestDto(PLAYER_IN_DB_LOGIN, "wrong");
         var response = restTemplate.postForEntity("/api/player/login",
                 dto, Object.class);
