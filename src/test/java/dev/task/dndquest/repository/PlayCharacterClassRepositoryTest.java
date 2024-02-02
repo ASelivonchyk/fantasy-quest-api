@@ -15,9 +15,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PlayCharacterClassRepositoryTest {
     private static final String TEST_CLASS_NAME = "fighter";
     private static final String TEST_WRONG_CLASS_NAME = "notExist";
+    private static PlayCharacterClass existingClassInDB;
     @Autowired
     private PlayCharacterClassRepository repository;
-    private static PlayCharacterClass existingClassInDB;
 
     @BeforeAll
     static void init(){
@@ -27,22 +27,22 @@ class PlayCharacterClassRepositoryTest {
     }
 
     @Test
-    void whenClassExistInDB_thenFindByNameReturnOptionalWithClass_ok() {
+    void whenClassExistInDB_thenReturnOptionalWithClass() {
         assertThat(repository.findByName(TEST_CLASS_NAME)).contains(existingClassInDB);
     }
 
     @Test
-    void whenClassNotExistInDB_thenFindByNameReturnEmptyOptional_ok() {
+    void whenClassNotExistInDB_thenReturnEmptyOptional() {
         assertThat(repository.findByName(TEST_WRONG_CLASS_NAME)).isEmpty();
     }
 
     @Test
-    void whenClassExistsInDB_thenExistByNameReturnTrue_ok() {
+    void whenClassExistsInDB_thenReturnTrue() {
         assertThat(repository.existsByName(TEST_CLASS_NAME)).isTrue();
     }
 
     @Test
-    void whenClassNotExistInDB_thenExistByNameReturnFalse_ok() {
+    void whenClassNotExistInDB_thenReturnFalse() {
         assertThat(repository.existsByName(TEST_WRONG_CLASS_NAME)).isFalse();
     }
 }

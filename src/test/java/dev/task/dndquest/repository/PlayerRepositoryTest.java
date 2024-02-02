@@ -1,5 +1,7 @@
 package dev.task.dndquest.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import dev.task.dndquest.model.entity.Player;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,8 +12,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(locations = "classpath:application-test.properties")
@@ -20,9 +20,9 @@ class PlayerRepositoryTest {
     private static final String TEST_LOGIN = "Tim";
     private static final String TEST_WRONG_LOGIN = "notExist";
     private static final String TEST_PASSWORD = "qwertyu1";
+    private Player playerFromDB;
     @Autowired
     private PlayerRepository repository;
-    private Player playerFromDB;
 
     @BeforeAll
     public void setUp(){
@@ -31,33 +31,33 @@ class PlayerRepositoryTest {
     }
 
     @AfterAll
-    void clearDBAfterTests() {
+    void clearDbAfterTests() {
         repository.deleteAll();
     }
 
     @Test
-    void whenSaveToDB_thenReturnPlayer_ok() {
+    void whenPlayerParametersValid_thenReturnSavedPlayer() {
         Player testPlayer = new Player(null, "Bob", TEST_PASSWORD, null);
         assertThat(repository.save(testPlayer).getId()).isNotNull();
     }
 
     @Test
-    void whenPlayerExistInDB_thenFindByLoginReturnOptionalWithPlayer_ok() {
+    void whenPlayerExistInDB_thenReturnOptionalWithPlayer() {
         assertThat(repository.findByLogin(TEST_LOGIN)).contains(playerFromDB);
     }
 
     @Test
-    void whenPlayerNotExistInDB_thenFindByLoginReturnEmptyOptional_ok() {
+    void whenPlayerNotExistInDB_thenReturnEmptyOptional() {
         assertThat(repository.findByLogin(TEST_WRONG_LOGIN)).isEmpty();
     }
 
     @Test
-    void whenPlayerExistsInDB_thenExistsByLoginReturnTrue_ok() {
+    void whenPlayerExistsInDB_thenReturnTrue() {
         assertThat(repository.existsByLogin(TEST_LOGIN)).isTrue();
     }
 
     @Test
-    void whenPlayerNotExistInDB_thenExistsByLoginReturnFalse_ok() {
+    void whenPlayerNotExistInDB_thenReturnFalse() {
         assertThat(repository.existsByLogin(TEST_WRONG_LOGIN)).isFalse();
     }
 }

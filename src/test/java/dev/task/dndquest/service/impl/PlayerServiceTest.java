@@ -1,5 +1,9 @@
 package dev.task.dndquest.service.impl;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
+
 import dev.task.dndquest.exception.BadCredentialsException;
 import dev.task.dndquest.exception.DuplicateLoginException;
 import dev.task.dndquest.mapper.PlayerMapper;
@@ -16,15 +20,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 class PlayerServiceTest {
     private static final String TEST_LOGIN = "Tom";
     private static final String TEST_PASS = "qwerty12";
     private static final String ENCODED_PASSWORD = "encodedPassword";
+    private static PlayerRequestDto dto;
+    private static Player player;
     @Mock
     PasswordEncoder passwordEncoder;
     @Mock
@@ -33,8 +35,6 @@ class PlayerServiceTest {
     private PlayerMapper mapper;
     @InjectMocks
     private PlayerServiceImpl service;
-    private static PlayerRequestDto dto;
-    private static Player player;
 
     @BeforeAll
     static void init() {
@@ -43,7 +43,7 @@ class PlayerServiceTest {
     }
 
     @Test
-    void whenSaveNewPlayer_thenReturnPlayer_ok() {
+    void whenPlayerParametersValid_thenReturnSavedPlayer() {
         when(repository.existsByLogin(dto.getLogin())).thenReturn(false);
         when(mapper.mapToEntity(dto)).thenReturn(player);
         when(passwordEncoder.encode(dto.getPassword())).thenReturn(ENCODED_PASSWORD);
@@ -52,42 +52,40 @@ class PlayerServiceTest {
     }
 
     @Test
-    void whenSavePlayerWithDuplicateLogin_thenThrowException_notOk() {
+    void whenPlayerExistInDb_thenThrowDuplicateLoginException() {
         when(repository.existsByLogin(dto.getLogin())).thenReturn(true);
         assertThatThrownBy(() -> service.save(dto)).isInstanceOf(DuplicateLoginException.class);
     }
 
     @Test
-    void whenFindByLoginAndPlayerExistInDB_thenReturnPlayer_ok() {
+    void whenPlayerExistInDb_thenReturnPlayer() {
         when(repository.findByLogin(TEST_LOGIN)).thenReturn(Optional.of(player));
         assertThat(service.findByLogin(TEST_LOGIN)).isEqualTo(player);
     }
 
     @Test
-    void whenFindByLoginAndPlayerNotExistInDB_thenThrowException_notOk() {
+    void whenPlayerNotExistInDb_thenThrowBadCredentialsException() {
         when(repository.findByLogin(TEST_LOGIN)).thenReturn(Optional.empty());
         assertThatThrownBy(() ->
                 service.findByLogin(TEST_LOGIN)).isInstanceOf(BadCredentialsException.class);
     }
 
     @Test
-    void whenExistByLoginAndPlayerExistsInDB_thenReturnTrue_ok() {
+    void whenPlayerExistsInDb_thenReturnTrue() {
         when(repository.existsByLogin(TEST_LOGIN)).thenReturn(true);
         assertThat(service.existsByLogin(TEST_LOGIN)).isTrue();
     }
 
     @Test
-    void whenExistByLoginAndPlayerNotExistsInDB_thenReturnFalse_ok() {
+    void whenPlayerNotExistsInDb_thenReturnFalse() {
         when(repository.existsByLogin(TEST_LOGIN)).thenReturn(false);
         assertThat(service.existsByLogin(TEST_LOGIN)).isFalse();
     }
 
     @Test
-    void whenPlayerNotExistInDB_thenAddCharacterToPlayer_ThrowException() {
-        when(repository.findByLogin(TEST_LOGIN)).thenReturn(Optional.empty());
-        PlayCharacter character = new PlayCharacter();
+    void whenPlayCharacterValidButPlayerNotExistIDb_thenThrowBadCredentialsException() {
         assertThatThrownBy(() ->
-                service.addCharacterToPlayer(character, TEST_LOGIN))
+                service.addCharacterToPlayer(new PlayCharacter(), TEST_LOGIN))
                 .isInstanceOf(BadCredentialsException.class);
     }
 }

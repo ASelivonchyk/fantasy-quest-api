@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 class AdventureControllerTest extends GenericControllerTest {
     @Test
     @Order(1)
-    void whenPathValid_thenGetAvailableAdventures_returnListOfStoryLineShortResponseDto() {
+    void whenRequestValid_thenReturnListOfStoryLineShortResponseDto() {
         var response = restTemplate.exchange(
                 "/api/adventure/available", HttpMethod.GET,
                 new HttpEntity<>(null, jwt),
@@ -40,7 +40,7 @@ class AdventureControllerTest extends GenericControllerTest {
 
     @Test
     @Order(2)
-    void whenPathValid_thenAddAvailableAdventures_returnListOfStoryLineShortResponseDtoWithAddedData() {
+    void whenRequestValid_thenReturnListOfStoryLineShortResponseDtoWithAddedData() {
         var response = restTemplate.exchange(
                 "/api/adventure/available/new", HttpMethod.GET,
                 new HttpEntity<>(null, jwt),
@@ -55,7 +55,7 @@ class AdventureControllerTest extends GenericControllerTest {
 
     @Test
     @Order(3)
-    void whenSerialOfAdventureIsValid_thenSelectAdventure_returnStoryLineFullResponseDto() {
+    void whenSerialOfAdventureIsValid_thenReturnStoryLineFullResponseDto() {
         Map<String, Integer> variable = new HashMap<>();
         variable.put("serial", 1);
         var response = restTemplate.exchange(
@@ -68,7 +68,7 @@ class AdventureControllerTest extends GenericControllerTest {
 
     @Test
     @Order(4)
-    void whenSerialOfAdventureIsNotValid_thenSelectAdventure_returnServiceUnavailable() {
+    void whenSerialOfAdventureInGetRequestIsNotValid_thenReturnServiceUnavailable() {
         Map<String, Integer> variable = new HashMap<>();
         variable.put("serial", 0);
         var response = restTemplate.exchange(
@@ -82,7 +82,7 @@ class AdventureControllerTest extends GenericControllerTest {
 
     @Test
     @Order(5)
-    void whenSerialOfAdventureIsValid_thenStartAdventure_returnStatusOkAndSaveDataToDb(
+    void whenSerialOfAdventureIsValid_thenSaveAdventureToDbAndReturnStatusOk(
             @Autowired PlayCharacterService characterService) {
         PlayCharacter savedCharacter = characterService.save(
                 new PlayCharacterRequestDto("Bil", "fighter", "orc", 10, 10, 10, 10, 10, 10));
@@ -107,7 +107,7 @@ class AdventureControllerTest extends GenericControllerTest {
 
     @Test
     @Order(6)
-    void whenSerialOfAdventureIsNotValid_thenStartAdventure_returnServiceUnavailable() {
+    void whenSerialOfAdventureInPostRequestIsNotValid_thenReturnServiceUnavailable() {
         Map<String, Integer> variable = new HashMap<>();
         variable.put("serial", 0);
         var response = restTemplate.exchange(

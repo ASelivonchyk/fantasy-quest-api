@@ -24,6 +24,10 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PlayCharacterServiceTest {
+    private static PlayCharacterRequestDto dto;
+    private static PlayCharacterClass pcClass;
+    private static Race race;
+    private static PlayCharacter playCharacter;
     @Mock
     private PlayCharacterRepository repository;
     @Mock
@@ -38,10 +42,6 @@ class PlayCharacterServiceTest {
     private PlayerService playerService;
     @InjectMocks
     private PlayCharacterServiceImpl service;
-    private static PlayCharacterRequestDto dto;
-    private static PlayCharacterClass pcClass;
-    private static Race race;
-    private static PlayCharacter playCharacter;
 
     @BeforeAll
     static void init() {
@@ -55,7 +55,7 @@ class PlayCharacterServiceTest {
     }
 
     @Test
-    void whenPlayCharacterClassValid_thenSavePlayCharacterClass_returnSavedCharacter() {
+    void whenPlayCharacterClassParametersValid_thenReturnSavedCharacter() {
         when(mapper.mapToEntity(dto)).thenReturn(playCharacter);
         when(ppcService.findByName(pcClass.getName())).thenReturn(pcClass);
         when(raceService.findByName(race.getName())).thenReturn(race);

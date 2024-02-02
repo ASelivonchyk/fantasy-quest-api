@@ -18,11 +18,11 @@ import static org.mockito.Mockito.when;
 class PlayCharacterClassServiceTest {
     private static final String TEST_CLASS_NAME = "fighter";
     private static final String TEST_WRONG_CLASS_NAME = "notExist";
+    private static PlayCharacterClass existingClassInDB;
     @Mock
     private PlayCharacterClassRepository repository;
     @InjectMocks
     private  PlayCharacterClassServiceImpl playCharacterClassService;
-    private static PlayCharacterClass existingClassInDB;
 
     @BeforeAll
     static void init(){
@@ -31,26 +31,26 @@ class PlayCharacterClassServiceTest {
         existingClassInDB.setId(1L);
     }
     @Test
-    void whenClassExistInDB_thenReturnClass_ok() {
+    void whenClassExistInDb_thenReturnClass_ok() {
         when(repository.findByName(TEST_CLASS_NAME)).thenReturn(Optional.of(existingClassInDB));
         assertThat(playCharacterClassService.findByName(TEST_CLASS_NAME)).isEqualTo(existingClassInDB);
     }
 
     @Test
-    void whenClassNotExistInDB_thenThrowException_notOk() {
+    void whenClassNotExistInDb_thenThrowCharacterClassNotFoundException() {
         when(repository.findByName(TEST_WRONG_CLASS_NAME)).thenReturn(Optional.empty());
         assertThatThrownBy(() -> playCharacterClassService.findByName(TEST_WRONG_CLASS_NAME))
                 .isInstanceOf(CharacterClassNotFoundException.class);
     }
 
     @Test
-    void whenClassExistsInDB_thenReturnTrue_ok() {
+    void whenClassExistsInDbb_thenReturnTrue() {
         when(repository.existsByName(TEST_CLASS_NAME)).thenReturn(true);
         assertThat(playCharacterClassService.existsByName(TEST_CLASS_NAME)).isTrue();
     }
 
     @Test
-    void whenClassNotExistInDB_thenReturnFalse_ok() {
+    void whenClassNotExistInDb_thenReturnFalse() {
         when(repository.existsByName(TEST_WRONG_CLASS_NAME)).thenReturn(false);
         assertThat(playCharacterClassService.existsByName(TEST_WRONG_CLASS_NAME)).isFalse();
     }
